@@ -1,5 +1,7 @@
 package bufmgr;
 
+import global.Minibase;
+
 public class Clock extends Replacer{
 
 
@@ -35,9 +37,13 @@ public class Clock extends Replacer{
 	@Override
 	public int pickVictim() {
 		// TODO Auto-generated method stub
+
 		int victim = 0;
-		for (int i = 0; i < frametab.length; i++) {
-			if(frametab[i].pincnt > victim) {
+		if(Minibase.BufferManager.frametab == null) {
+            System.out.println("frametab null");
+        }
+		for (int i = 0; i < Minibase.BufferManager.frametab.length; i++) {
+			if(Minibase.BufferManager.frametab[i].pincnt > victim) {
 				victim = i;
 			}
 		}
