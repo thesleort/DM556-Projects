@@ -201,10 +201,11 @@ public class BufMgr implements GlobalConst {
 	 * Gets the total number of unpinned buffer frames.
 	 */
 	public int getNumUnpinned() {
+	    int j = 0;
         for (int i = 0 ; i < Minibase.BufferManager.frametab.length; i++ ){
-            flushPage(Minibase.BufferManager.frametab[i].pageno);
+            if (0 != Minibase.BufferManager.frametab[i].state){ j++;};
         }
-        return 0;
+        return j;
 	}
 
 } // public class BufMgr implements GlobalConst
