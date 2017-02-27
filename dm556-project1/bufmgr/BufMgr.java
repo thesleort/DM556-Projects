@@ -124,6 +124,7 @@ public class BufMgr implements GlobalConst {
 
 		//first check if the page is already pinned
 		FrameDesc fdesc = pagemap.get(pageno.pid);
+		System.out.println(fdesc);
 		if (fdesc != null) {
 			if (skipRead == true && fdesc.pincnt > 0) {
 				throw new IllegalArgumentException(
@@ -150,20 +151,23 @@ public class BufMgr implements GlobalConst {
 		}
 
 		//read in the page if requested, and wrap the buffer
-		if(skipRead == PIN_MEMCPY) {
+		if(skipRead == true) {
 			bufpool[frameNo].copyPage(page);
 		} else {
 			Minibase.DiskManager.read_page(pageno, bufpool[frameNo]);
 		}
 		page.setPage(bufpool[frameNo]);
 
+		System.out.println(pageno.pid);
 		//update the frame descriptor
-		fdesc.pageno.pid = pageno.pid;
-		fdesc.pincnt = 1;
-		fdesc.dirty = false;
+		if(fdesc != null) {
+			fdesc.pageno.pid = pageno.pid;
+			fdesc.pincnt = 1;
+			fdesc.dirty = false;
 
-		//update
-		fdesc.pageno.pid = pageno.pid;
+			pagemap.put(pageno.pid, fdesc);
+			replacer.pinPage(fdesc);
+		}
 
 	}
 
@@ -210,7 +214,7 @@ public class BufMgr implements GlobalConst {
 	 * Gets the total number of buffer frames.
 	 */
 	public int getNumBuffers() {
-		return Minibase.BufferManager.bufpool.length
+		return Minibase.BufferManager.bufpool.length;
 	}
 
 	/**
@@ -219,7 +223,7 @@ public class BufMgr implements GlobalConst {
 	public int getNumUnpinned() {
 	    int j = 0;
         for (int i = 0 ; i < Minibase.BufferManager.frametab.length; i++ ){
-            if (0 != Minibase.BufferManager.frametab[i].state){ j++;};
+            if (0 != Minibase.BufferManager.frametab[i].state){ j++;}
         }
         return j;
 	}
