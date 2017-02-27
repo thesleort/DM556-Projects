@@ -145,6 +145,11 @@ public class BufMgr implements GlobalConst {
 
 		// select an available frame
 		int frameNo = replacer.pickVictim();
+		if (frameNo == -1){
+            throw new IllegalStateException(
+                    "No victim available;"
+            );
+        }
         if (debugvalue) {
             System.out.println("Framenumber is "+frameNo);
         }
