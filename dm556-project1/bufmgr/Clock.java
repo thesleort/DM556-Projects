@@ -35,7 +35,16 @@ public class Clock extends Replacer{
 	@Override
 	public int pickVictim() {
 		// TODO Auto-generated method stub
-		return 0;
+		int victim = 0;
+		for (int i = 0; i < frametab.length; i++) {
+			if(frametab[i].pincnt > victim) {
+				victim = i;
+			}
+		}
+		if(victim > 0) {
+			return victim;
+		} else {
+			return -1;
+		}
 	}
-
 }

@@ -177,7 +177,7 @@ public class BufMgr implements GlobalConst {
 	 * @param pageno
 	 *            identifies the page to unpin
 	 * @param dirty
-	 *            UNPIN_DIRTY if the page was modified, UNPIN_CLEAN otherrwise
+	 *            UNPIN_DIRTY if the page was modified, UNPIN_CLEAN otherwise
 	 * @throws IllegalArgumentException
 	 *             if the page is not present or not pinned
 	 */
