@@ -122,24 +122,40 @@ public class BufMgr implements GlobalConst {
 	 */
 	public void pinPage(PageId pageno, Page page, boolean skipRead) {
 
-
-
-		throw new UnsupportedOperationException("Not implemented");
 		//first check if the page is already pinned
 		FrameDesc fdesc = pagemap.get(pageno.pid);
-		if (fdesc.dirty){
-			Minibase.DiskManager.write_page(fdesc.pageno,bufpool[frameno]);
+		if (fdesc != null) {
+			if (skipRead == true && fdesc.pincnt > 0) {
+				throw new IllegalArgumentException(
+						"Page pinned; PIN_MEMCPY not allowed"
+				);
+			}
+
+			fdesc.pincnt++;
+			replacer.pinPage(fdesc);
+			page.setPage(bufpool[fdesc.index]);
 			return;
+		} // if in pool
+
+		// select an available frame
+		int frameNo = replacer.pickVictim();
+		if(frameNo < 0) {
+
+			if( fdesc.pageno.pid != INVALID_PAGEID) {
+				pagemap.remove(fdesc.pageno.pid);
+				if(fdesc.dirty) {
+					Minibase.DiskManager.write_page(fdesc.pageno, bufpool[frameNo]);
+				}
+			}
 		}
 
 		//read in the page if requested, and wrap the buffer
-		if(skipRead == PIN_MEMCPY){
-			bufpool[frameno].copypage(page);
-		}else {
-			Minibase.DiskManager.read_page(pageno, bufpool[frameno]);
+		if(skipRead == PIN_MEMCPY) {
+			bufpool[frameNo].copyPage(page);
+		} else {
+			Minibase.DiskManager.read_page(pageno, bufpool[frameNo]);
 		}
-		page.setPage(bufpool[framano]);
-
+		page.setPage(bufpool[frameNo]);
 
 		//update the frame descriptor
 		fdesc.pageno.pid = pageno.pid;
@@ -147,7 +163,7 @@ public class BufMgr implements GlobalConst {
 		fdesc.dirty = false;
 
 		//update
-
+		fdesc.pageno.pid = pageno.pid;
 
 	}
 
