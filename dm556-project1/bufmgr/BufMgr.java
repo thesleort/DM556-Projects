@@ -175,7 +175,7 @@ public class BufMgr implements GlobalConst {
 		FrameDesc fdesc = pagemap.get(pageno.pid);
 		if (fdesc.dirty){
 			//TODO Find out how to get current page from availble information in this function.
-			Minibase.DiskManager.write_page(pageno,);
+			Minibase.DiskManager.write_page(pageno,Minibase.BufferManager.bufpool[pageno.getPID()]);
 			fdesc.dirty = false;
 		}
 		throw new UnsupportedOperationException("Not implemented");
@@ -185,24 +185,26 @@ public class BufMgr implements GlobalConst {
 	 * Immediately writes all dirty pages in the buffer pool to disk.
 	 */
 	public void flushAllPages() {
-		
-		throw new UnsupportedOperationException("Not implemented");
-
+	    for (int i = 0 ; i < Minibase.BufferManager.frametab.length; i++ ){
+            flushPage(Minibase.BufferManager.frametab[i].pageno);
+        }
 	}
 
 	/**
 	 * Gets the total number of buffer frames.
 	 */
 	public int getNumBuffers() {
-		throw new UnsupportedOperationException("Not implemented");
+		return Minibase.BufferManager.bufpool.length
 	}
 
 	/**
 	 * Gets the total number of unpinned buffer frames.
 	 */
 	public int getNumUnpinned() {
-		
-		throw new UnsupportedOperationException("Not implemented");
+        for (int i = 0 ; i < Minibase.BufferManager.frametab.length; i++ ){
+            flushPage(Minibase.BufferManager.frametab[i].pageno);
+        }
+        return 0;
 	}
 
 } // public class BufMgr implements GlobalConst
