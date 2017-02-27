@@ -21,6 +21,8 @@ public class BufMgr implements GlobalConst {
 	/** Actual pool of pages (can be viewed as an array of byte arrays). */
 	protected Page[] bufpool;
 
+	private boolean debugvalue = true;
+
 	/** Array of descriptors, each containing the pin count, dirty status, etc. */
 	protected FrameDesc[] frametab;
 
@@ -122,6 +124,10 @@ public class BufMgr implements GlobalConst {
 	 */
 	public void pinPage(PageId pageno, Page page, boolean skipRead) {
 
+        if (debugvalue){
+            System.out.println("pin function start");
+        }
+
 		//first check if the page is already pinned
 		FrameDesc fdesc = pagemap.get(pageno.pid);
 		if (fdesc != null) {
@@ -139,6 +145,9 @@ public class BufMgr implements GlobalConst {
 
 		// select an available frame
 		int frameNo = replacer.pickVictim();
+        if (debugvalue) {
+            System.out.println("Framenumber is "+frameNo);
+        }
 		if(frameNo < 0) {
 
 			if( fdesc.pageno.pid != INVALID_PAGEID) {
@@ -156,8 +165,9 @@ public class BufMgr implements GlobalConst {
 			Minibase.DiskManager.read_page(pageno, bufpool[frameNo]);
 		}
 		page.setPage(bufpool[frameNo]);
-
-		System.out.println("Pageno = "+pageno.pid);
+        if (debugvalue) {
+            System.out.println("Pageno = " + pageno.pid);
+        }
 		//update the frame descriptor
 		if(fdesc != null) {
 			fdesc.pageno.pid = pageno.pid;
@@ -167,6 +177,9 @@ public class BufMgr implements GlobalConst {
 			pagemap.put(pageno.pid, fdesc);
 			replacer.pinPage(fdesc);
 		}
+        if (debugvalue){
+            System.out.println("pin function end");
+        }
 
 	}
 
@@ -181,14 +194,14 @@ public class BufMgr implements GlobalConst {
 	 *             if the page is not present or not pinned
 	 */
 	public void unpinPage(PageId pageno, boolean dirty) throws IllegalArgumentException {
-	    boolean debug = true;
-	    if (debug){
+
+	    if (debugvalue){
             System.out.println("unpin function start");
         }
         //Checks if page is dirty.
         //first check if the page is unpinned
         FrameDesc fdesc = pagemap.get(pageno.pid);
-        if (debug) {
+        if (debugvalue) {
             System.out.println(pageno.getPID());
         }
         if (fdesc == null) throw new IllegalArgumentException(
@@ -198,7 +211,7 @@ public class BufMgr implements GlobalConst {
             flushPage(pageno);
         }
         fdesc.pincnt--;
-        if (debug) {
+        if (debugvalue) {
             System.out.println("page state is " + pageno.getPID());
             System.out.println("Dirty state is " + dirty);
         }
@@ -206,7 +219,7 @@ public class BufMgr implements GlobalConst {
 
         //unpin page.
         Minibase.DiskManager.deallocate_page(pageno);
-        if (debug){
+        if (debugvalue){
             System.out.println("unpin function end");
         }
 	    return;
@@ -220,9 +233,10 @@ public class BufMgr implements GlobalConst {
 
 		FrameDesc fdesc = pagemap.get(pageno.pid);
 		if (fdesc == null)  {return;}
-        System.out.println("fdesc = "+fdesc.index);
+        if (debugvalue) {
+            System.out.println("fdesc = " + fdesc.index);
+        }
         if (fdesc.dirty){
-			//TODO Find out how to get current page from availble information in this function.
 			Minibase.DiskManager.write_page(pageno,Minibase.BufferManager.bufpool[pageno.getPID()]);
 			fdesc.dirty = false;
 		}
