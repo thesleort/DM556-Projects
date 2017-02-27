@@ -182,8 +182,29 @@ public class BufMgr implements GlobalConst {
 	 *             if the page is not present or not pinned
 	 */
 	public void unpinPage(PageId pageno, boolean dirty) throws IllegalArgumentException {
-		
-		throw new UnsupportedOperationException("Not implemented");
+
+        //first check if the page is unpinned
+        FrameDesc fdesc = pagemap.get(pageno.pid);
+        System.out.println(fdesc);
+        if (fdesc != null) {
+            if (dirty == true && fdesc.pincnt > 0) {
+                throw new IllegalArgumentException(
+                        "Page not pinned;"
+                );
+            }
+
+            fdesc.pincnt--;
+            return;
+        }
+	    if (dirty){
+	        flushPage(pageno);
+	        dirty = false;
+        }
+
+
+        //unpin page.
+        Minibase.DiskManager.deallocate_page(pageno);
+	    return;
 
 	}
 
