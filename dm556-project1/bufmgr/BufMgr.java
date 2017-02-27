@@ -121,8 +121,33 @@ public class BufMgr implements GlobalConst {
 	 *             if all pages are pinned (i.e. pool exceeded)
 	 */
 	public void pinPage(PageId pageno, Page page, boolean skipRead) {
-		
+
+
+
 		throw new UnsupportedOperationException("Not implemented");
+		//first check if the page is already pinned
+		FrameDesc fdesc = pagemap.get(pageno.pid);
+		if (fdesc.dirty){
+			Minibase.DiskManager.write_page(fdesc.pageno,bufpool[frameno]);
+			return;
+		}
+
+		//read in the page if requested, and wrap the buffer
+		if(skipRead == PIN_MEMCPY){
+			bufpool[frameno].copypage(page);
+		}else {
+			Minibase.DiskManager.read_page(pageno, bufpool[frameno]);
+		}
+		page.setPage(bufpool[framano]);
+
+
+		//update the frame descriptor
+		fdesc.pageno.pid = pageno.pid;
+		fdesc.pincnt = 1;
+		fdesc.dirty = false;
+
+		//update
+
 
 	}
 
