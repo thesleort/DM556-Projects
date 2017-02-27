@@ -171,7 +171,13 @@ public class BufMgr implements GlobalConst {
 	 * Immediately writes a page in the buffer pool to disk, if dirty.
 	 */
 	public void flushPage(PageId pageno) {
-		
+
+		FrameDesc fdesc = pagemap.get(pageno.pid);
+		if (fdesc.dirty){
+			//TODO Find out how to get current page from availble information in this function.
+			Minibase.DiskManager.write_page(pageno,);
+			fdesc.dirty = false;
+		}
 		throw new UnsupportedOperationException("Not implemented");
 	}
 
