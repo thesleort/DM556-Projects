@@ -216,33 +216,13 @@ public class BufMgr implements GlobalConst {
 	    // Check if page is unpinned
 		FrameDesc fdesc = pagemap.get(pageno.pid);
         if (fdesc.dirty) {
-            //writes page to disk
+            // Writes page to disk and sets the dirty-state to false, since it has not been modified when comparing it
+            // to the same page on the disk.
             Minibase.DiskManager.write_page(fdesc.pageno, bufpool[fdesc.index]);
             fdesc.dirty = false;
             pagemap.put(pageno.pid, fdesc);
-            }
+        }
     }
-    /*
-    	public void flushPage(PageId pageno) {
-
-	    // Check if page is unpinned
-		FrameDesc fdesc = pagemap.get(pageno.pid);
-        //TODO: It can still be fushed? its not being removed updates are just written to disk.?
-		// If it is pinned, it cannot flush the page and thus must return.
-		//if (fdesc.pincnt < 0)  {return;}
-		// If the page exists, it should be written to the disk.
-        //TODO: should we even check if its invalid? doubt so?
-        //if( fdesc.pageno.pid != INVALID_PAGEID) {
-            // Since it is being written to the disk, it shouldn't be in the pagemap anymore.
-            //TODO We are not removing the page the the pagemap, we are just saving it to disk.?
-            //pagemap.remove(fdesc.pageno.pid);
-            if (fdesc.dirty) {
-                Minibase.DiskManager.write_page(fdesc.pageno, bufpool[fdesc.index]);
-            }
-        //}
-    }
-
-     */
 
 	/**
 	 * Immediately writes all dirty pages in the buffer pool to disk.
