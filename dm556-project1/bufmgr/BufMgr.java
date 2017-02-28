@@ -207,6 +207,7 @@ public class BufMgr implements GlobalConst {
         );
         if (dirty){
             flushPage(pageno);
+            fdesc.dirty = false;
         }
         fdesc.pincnt--;
         pagemap.put(pageno.pid, fdesc);
