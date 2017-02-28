@@ -52,11 +52,12 @@ public class Minibase {
    */
   public void init(String dbname, int num_pgs, int bufpoolsize,
       String replacement_policy, boolean exists) {
-
+    System.out.println("init of db");
     // save the file name
     DatabaseName = dbname;
 
     // load the static layers
+    System.out.println("Loading of the static layers");
     try {
       DiskManager = new DiskMgr();
       BufferManager = new BufMgr(bufpoolsize);
@@ -65,13 +66,20 @@ public class Minibase {
     }
 
     // create or open the database
+    System.out.println("Opening the db");
     try {
       if (exists) {
+        System.out.println("opening the db");
         DiskManager.openDB(dbname);
+
         SystemCatalog = new Catalog(true);
       } else {
+        System.out.println("Making a new db");
         DiskManager.createDB(dbname, num_pgs);
+        System.out.println("debugging line 21");
         SystemCatalog = new Catalog(false);
+
+        System.out.println("flushing all pages");
         BufferManager.flushAllPages();
       }
     } catch (Exception exc) {

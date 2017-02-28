@@ -21,7 +21,7 @@ public class BufMgr implements GlobalConst {
 	/** Actual pool of pages (can be viewed as an array of byte arrays). */
 	protected Page[] bufpool;
 
-	private boolean debugvalue = true;
+	private boolean debugvalue = false;
 
 	/** Array of descriptors, each containing the pin count, dirty status, etc. */
 	protected FrameDesc[] frametab;
@@ -71,9 +71,11 @@ public class BufMgr implements GlobalConst {
 		PageId firstid = Minibase.DiskManager.allocate_page(run_size);
 		
 		// try to pin the first page
-		try {pinPage(firstid, firstpg, PIN_MEMCPY);} 
+        System.out.println("trying to pin the first page");
+        try {pinPage(firstid, firstpg, PIN_MEMCPY);}
 		catch (RuntimeException exc) {
-		      // roll back because pin failed
+            System.out.println("failed to pin the first page.");
+            // roll back because pin failed
 		      for (int i = 0; i < run_size; i++) {
 		        firstid.pid += 1;
 		        Minibase.DiskManager.deallocate_page(firstid);
@@ -96,7 +98,10 @@ public class BufMgr implements GlobalConst {
 	 *             if the page is pinned
 	 */
 	public void freePage(PageId pageno) throws IllegalArgumentException {
-		throw new UnsupportedOperationException("Not implemented");
+	    if(pageno.pid != -1){
+            Minibase.BufferManager.flushPage(pageno);
+        }
+		Minibase.DiskManager.deallocate_page(pageno);
 	}
 
 	/**
@@ -123,68 +128,57 @@ public class BufMgr implements GlobalConst {
 	 *             if all pages are pinned (i.e. pool exceeded)
 	 */
 	public void pinPage(PageId pageno, Page page, boolean skipRead) {
-
-        if (debugvalue){
-            System.out.println("pin function start");
-        }
-
-		//first check if the page is already pinned
+        System.out.println("pinpage called with pageid "+pageno.pid+" Skipread "+skipRead+"and page "+ page.toString());
+        //first check if the page is already pinned
 		FrameDesc fdesc = pagemap.get(pageno.pid);
-		if (fdesc != null) {
-			if (skipRead == true && fdesc.pincnt > 0) {
-				throw new IllegalArgumentException(
-						"Page pinned; PIN_MEMCPY not allowed"
-				);
-			}
+        if (fdesc != null) {
 
+		    //Validate the pin method
+			if (skipRead == PIN_MEMCPY && fdesc.pincnt > 0) throw new IllegalArgumentException(
+                    "Page pinned; PIN_MEMCPY not allowed"
+            );
+            //increment pin count, notify the replacer, and wrap the buffer.
 			fdesc.pincnt++;
-			replacer.pinPage(fdesc);
+            replacer.pinPage(fdesc);
 			page.setPage(bufpool[fdesc.index]);
-			return;
+            return;
 		} // if in pool
 
 		// select an available frame
 		int frameNo = replacer.pickVictim();
-		if (frameNo == -1){
-            throw new IllegalStateException(
-                    "No victim available;"
-            );
+		if (frameNo < 0){
+			throw new IllegalStateException("All pages pinned.");
         }
-        if (debugvalue) {
-            System.out.println("Framenumber is "+frameNo);
-        }
-		if(frameNo < 0) {
+//        System.out.println(frameNo);
+//        System.out.println("skipread = " +skipRead);
+        //fdesc.pageno.pid = frameNo;
+        //Minibase.BufferManager.frametab[frameNo] = fdesc;
 
-			if( fdesc.pageno.pid != INVALID_PAGEID) {
+		fdesc = Minibase.BufferManager.frametab[frameNo];
+
+		if( fdesc.pageno.pid != INVALID_PAGEID) {
 				pagemap.remove(fdesc.pageno.pid);
 				if(fdesc.dirty) {
 					Minibase.DiskManager.write_page(fdesc.pageno, bufpool[frameNo]);
 				}
 			}
-		}
-
 		//read in the page if requested, and wrap the buffer
-		if(skipRead == true) {
+		if(skipRead == PIN_MEMCPY) {
 			bufpool[frameNo].copyPage(page);
 		} else {
 			Minibase.DiskManager.read_page(pageno, bufpool[frameNo]);
 		}
 		page.setPage(bufpool[frameNo]);
-        if (debugvalue) {
-            System.out.println("Pageno = " + pageno.pid);
-        }
+//        if (debugvalue) {System.out.println("Pageno = " + pageno.pid);}
 		//update the frame descriptor
-		if(fdesc != null) {
+
 			fdesc.pageno.pid = pageno.pid;
 			fdesc.pincnt = 1;
 			fdesc.dirty = false;
 
 			pagemap.put(pageno.pid, fdesc);
 			replacer.pinPage(fdesc);
-		}
-        if (debugvalue){
-            System.out.println("pin function end");
-        }
+
 
 	}
 
@@ -199,16 +193,12 @@ public class BufMgr implements GlobalConst {
 	 *             if the page is not present or not pinned
 	 */
 	public void unpinPage(PageId pageno, boolean dirty) throws IllegalArgumentException {
+        System.out.println("unpin page called with pageid"+pageno.pid+" Dirty status "+dirty);
 
-	    if (debugvalue){
-            System.out.println("unpin function start");
-        }
         //Checks if page is dirty.
         //first check if the page is unpinned
         FrameDesc fdesc = pagemap.get(pageno.pid);
-        if (debugvalue) {
-            System.out.println(pageno.getPID());
-        }
+
         if (fdesc == null) throw new IllegalArgumentException(
                 "Page not pinned;"
         );
@@ -216,17 +206,10 @@ public class BufMgr implements GlobalConst {
             flushPage(pageno);
         }
         fdesc.pincnt--;
-        if (debugvalue) {
-            System.out.println("page state is " + pageno.getPID());
-            System.out.println("Dirty state is " + dirty);
-        }
-
-
+        pagemap.put(pageno.pid, fdesc);
+        replacer.unpinPage(fdesc);
         //unpin page.
-        Minibase.DiskManager.deallocate_page(pageno);
-        if (debugvalue){
-            System.out.println("unpin function end");
-        }
+
 	    return;
 
 	}
@@ -235,16 +218,18 @@ public class BufMgr implements GlobalConst {
 	 * Immediately writes a page in the buffer pool to disk, if dirty.
 	 */
 	public void flushPage(PageId pageno) {
-
 		FrameDesc fdesc = pagemap.get(pageno.pid);
 		if (fdesc == null)  {return;}
         if (debugvalue) {
             System.out.println("fdesc = " + fdesc.index);
         }
-        if (fdesc.dirty){
-			Minibase.DiskManager.write_page(pageno,Minibase.BufferManager.bufpool[pageno.getPID()]);
-			fdesc.dirty = false;
-		}
+
+        if( fdesc.pageno.pid != INVALID_PAGEID) {
+            pagemap.remove(fdesc.pageno.pid);
+            if(fdesc.dirty) {
+                Minibase.DiskManager.write_page(fdesc.pageno, bufpool[fdesc.index]);
+            }
+        }
 	}
 
 	/**

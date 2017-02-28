@@ -8,7 +8,7 @@ import global.PageId;
 /**
  * Test suite for the bufmgr layer.
  */
-class BMTest extends TestDriver {
+class  BMTest extends TestDriver {
 
   /** The display name of the test suite. */
   private static final String TEST_NAME = "buffer manager tests";
@@ -19,8 +19,11 @@ class BMTest extends TestDriver {
   public static void main(String argv[]) {
 
     // create a clean Minibase instance
+    System.out.println("starting test");
     BMTest bmt = new BMTest();
+    System.out.println("Creating Database");
     bmt.create_minibase();
+    System.out.println("created database");
 
     // run all the test cases
     System.out.println("\n" + "Running " + TEST_NAME + "...");

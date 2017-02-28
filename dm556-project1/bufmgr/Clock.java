@@ -38,19 +38,16 @@ public class Clock extends Replacer{
 	public int pickVictim() {
 		// TODO Auto-generated method stub
 
-		int victim = 0;
 		if(Minibase.BufferManager.frametab == null) {
-            System.out.println("frametab null");
+//            System.out.println("frametab null");
         }
 		for (int i = 0; i < Minibase.BufferManager.frametab.length; i++) {
-			if(Minibase.BufferManager.frametab[i].pincnt > victim) {
-				victim = i;
+            if(Minibase.BufferManager.frametab[i].pincnt == 0) {
+//                System.out.println("Victim is = " +i);
+                return i;
 			}
 		}
-		if(victim > 0) {
-			return victim;
-		} else {
 			return -1;
 		}
-	}
+
 }
