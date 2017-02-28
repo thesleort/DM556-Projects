@@ -104,6 +104,9 @@ Pickvictim gets the index for the first unpinned page, and returns -1 if all pag
 Freepage First checks if the page is pinned. If its not, it then deallocates the page from disk.
 \lstinputlisting[firstline=103,lastline=110,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 \vspace{10mm}
+
+
+
 pinpage
 \lstinputlisting[firstline=129,lastline=129,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 First we check if the page is already in the bufferpoll if it is we increment the pin counter
@@ -115,6 +118,9 @@ If we have a non pinned frame we write this page to disk if its dirty.
 And if it isnt dirty we  copy or read the new page into the bufferpool and update the pagemap.
 \lstinputlisting[firstline=164,lastline=179,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 \vspace{10mm}
+
+
+
 unpinpage
 \lstinputlisting[firstline=189,lastline=189,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 First we check if the page is pinned. if its not we throw an exception.
@@ -122,8 +128,23 @@ First we check if the page is pinned. if its not we throw an exception.
 If its in the buffpool we decrement the pagecounter by 1, and update the pagemap with the new information.
 \lstinputlisting[firstline=198,lastline=205,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 \vspace{10mm}
-flushpage
-\lstinputlisting[firstline=215,lastline=215,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+
+
+
+flushpage\\
+saves the page to disk, and updates the dirty state of the framedesc. there is some risk of redundancy due to risk of dirty being updated to false by both the flushpage and by the parent function.
+\lstinputlisting[firstline=215,lastline=224,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\vspace{10mm}
+flushAllPages loops over the framatab and calls flushpage on them. if they are dirty they are saved and if they are not they are not saved.
+\lstinputlisting[firstline=205,lastline=254,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\vspace{10mm}
+
+getNumBuffers simplys returns the lenght of the bufferpool
+\lstinputlisting[firstline=259,lastline=261,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\vspace{10mm}
+
+getNumUnpinned
+\lstinputlisting[firstline=266,lastline=274,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 \vspace{10mm}
 
 Pickvictim is implemented to return the index for the first element with pincnt 0. and if all elements are in use it returns -1 to indicate this.
@@ -134,11 +155,11 @@ From the testing we've done the programs gets into a neverending loop pin/unpin 
 \subsection{Conclusion}
 
 
-
+\newpage
 \section{Appendix}
-Pickvictim
+pickVictim in Clock.java
 \lstinputlisting[firstline=37,lastline=46, frame=single]{../dm556-project1/bufmgr/Clock.java}
 
-bufmgr.java
+BufMgr.java
 \lstinputlisting[frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 \end{document}
