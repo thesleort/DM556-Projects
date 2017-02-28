@@ -178,7 +178,7 @@ public class BufMgr implements GlobalConst {
         fdesc.pincnt = 1;
         fdesc.dirty = false;
 
-        // Pin the page and tell that it is pinned, by adding it to the pagemap.
+        // Pin the page and put the updated page in the pagemap.
         pagemap.put(pageno.pid, fdesc);
         replacer.pinPage(fdesc);
 	}
@@ -206,14 +206,17 @@ public class BufMgr implements GlobalConst {
                 "Page not pinned;"
         );
 
-
+        // If dirty, it should write the the page to the disk and then tell that the page is not dirty anymore.
         if (dirty){
             flushPage(pageno);
             fdesc.dirty = false;
         }
+
+        // Decrement the pin count, since the page is pinned by one less. Also unpin the page and update the page in the
+        // pagemap.
         fdesc.pincnt--;
         pagemap.put(pageno.pid, fdesc);
-        replacer.pinPage(fdesc);
+        replacer.unpinPage(fdesc);
         //unpin page.
 
 	    return;
@@ -224,13 +227,17 @@ public class BufMgr implements GlobalConst {
 	 * Immediately writes a page in the buffer pool to disk, if dirty.
 	 */
 	public void flushPage(PageId pageno) {
-		FrameDesc fdesc = pagemap.get(pageno.pid);
-		if (fdesc == null)  {return;}
-        if (debugvalue) {
-            System.out.println("fdesc = " + fdesc.index);
-        }
 
+	    // Check if page is unpinned
+		FrameDesc fdesc = pagemap.get(pageno.pid);
+
+		// If it is pinned, it cannot flush the page and thus must return.
+		if (fdesc == null)  {return;}
+        if (debugvalue) System.out.println("fdesc = " + fdesc.index);
+
+		// If the page exists, it should be written to the disk.
         if( fdesc.pageno.pid != INVALID_PAGEID) {
+            // Since it is being written to the disk, it shouldn't be in the pagemap anymore.
             pagemap.remove(fdesc.pageno.pid);
             if(fdesc.dirty) {
                 Minibase.DiskManager.write_page(fdesc.pageno, bufpool[fdesc.index]);
@@ -242,6 +249,7 @@ public class BufMgr implements GlobalConst {
 	 * Immediately writes all dirty pages in the buffer pool to disk.
 	 */
 	public void flushAllPages() {
+	    // This is simply an extension of flushPage(), where it flushes all pages using a loop.
 	    for (int i = 0 ; i < Minibase.BufferManager.frametab.length; i++ ){
             flushPage(Minibase.BufferManager.frametab[i].pageno);
         }
@@ -258,9 +266,11 @@ public class BufMgr implements GlobalConst {
 	 * Gets the total number of unpinned buffer frames.
 	 */
 	public int getNumUnpinned() {
+	    // Using a loop, this checks the state of each frame. Each time an unpinned frame is found, "j" is incremented.
+        // In the end "j" is returned, as that must be the total amount of unpinned buffer frames.
 	    int j = 0;
-        for (int i = 0 ; i < Minibase.BufferManager.frametab.length; i++ ){
-            if (0 != Minibase.BufferManager.frametab[i].state){ j++;}
+        for (int i = 0 ; i < Minibase.BufferManager.frametab.length; i++ ) {
+            if (0 != Minibase.BufferManager.frametab[i].state) j++;
         }
         return j;
 	}
