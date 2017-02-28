@@ -105,8 +105,27 @@ Freepage First checks if the page is pinned. If its not, it then deallocates the
 \lstinputlisting[firstline=103,lastline=110,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 \vspace{10mm}
 pinpage
-\lstinputlisting[firstline=100,lastline=110,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\lstinputlisting[firstline=129,lastline=129,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+First we check if the page is already in the bufferpoll if it is we increment the pin counter
+\lstinputlisting[firstline=133,lastline=145,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+If it isnt we pick a victim, and if there isnt any victims we throw an IllegalStateException.
+\lstinputlisting[firstline=147,lastline=152,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+If we have a non pinned frame we write this page to disk if its dirty.
+\lstinputlisting[firstline=154,lastline=160,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+And if it isnt dirty we  copy or read the new page into the bufferpool and update the pagemap.
+\lstinputlisting[firstline=164,lastline=179,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 \vspace{10mm}
+unpinpage
+\lstinputlisting[firstline=189,lastline=189,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+First we check if the page is pinned. if its not we throw an exception.
+\lstinputlisting[firstline=193,lastline=196,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+If its in the buffpool we decrement the pagecounter by 1, and update the pagemap with the new information.
+\lstinputlisting[firstline=198,lastline=205,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\vspace{10mm}
+flushpage
+\lstinputlisting[firstline=215,lastline=215,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\vspace{10mm}
+
 Pickvictim is implemented to return the index for the first element with pincnt 0. and if all elements are in use it returns -1 to indicate this.
 \lstinputlisting[firstline=37,lastline=46, frame=single]{../dm556-project1/bufmgr/Clock.java}
 

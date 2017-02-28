@@ -153,7 +153,6 @@ public class BufMgr implements GlobalConst {
 
         // Pick the frame that is not pinned.
 		fdesc = Minibase.BufferManager.frametab[frameNo];
-
 		// If the frame was in use and dirty, it should write it to the disk.
 		if( fdesc.pageno.pid != INVALID_PAGEID) {
 				pagemap.remove(fdesc.pageno.pid);
@@ -192,17 +191,13 @@ public class BufMgr implements GlobalConst {
         //Checks if page is dirty.
         // First check if the page is unpinned
         FrameDesc fdesc = pagemap.get(pageno.pid);
-
         if (fdesc == null) throw new IllegalArgumentException(
                 "Page not pinned;"
         );
-
         // If dirty, it should write the the page to the disk and then tell that the page is not dirty anymore.
         if (dirty){
-            flushPage(pageno);
-            fdesc.dirty = false;
+            flushPage(pageno); fdesc.dirty = false;
         }
-
         // Decrement the pin count, since the page is pinned by one less. Also unpin the page and update the page in the
         // pagemap.
         fdesc.pincnt--;
