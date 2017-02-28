@@ -43,7 +43,6 @@ public class Clock extends Replacer{
         }
 		for (int i = 0; i < Minibase.BufferManager.frametab.length; i++) {
             if(Minibase.BufferManager.frametab[i].pincnt == 0) {
-//                System.out.println("Victim is = " +i);
                 return i;
 			}
 		}

@@ -77,7 +77,7 @@ The overall status of of project is that we
 \subsection{Specification}
 We were tasked with implementing the following functions for the bufmgr.java\\
 
-freePage, pinPage, unpinPage, flushPage, flushAllPages, getNumBuffers and getNumUnpinned \\
+freePage, pinPage, unpinPage, flushPage, flushAllPages, getNumBuffers, getNumUnpinned and pick victim. \\
 
 freePage should deallocate a page from disk.\\
 
@@ -91,7 +91,9 @@ Flushpages should write all pages to disk if they're dirty.\\
 
 getNumBuffers gets the amount of buffers.\\
 
-getNumUnpinned gets the number of unpinned pages.
+getNumUnpinned gets the number of unpinned pages.\\
+
+Pickvictim gets the index for the first unpinned page, and returns -1 if all pages in the pool are pinned.
 
 \subsection{Design}
 
@@ -99,7 +101,19 @@ Flushpages was implementing using Flushpage as they're almost doing the same and
 
 \subsection{Implementation}
 
+Pickvictim is implemented to return the index for the first element with pincnt 0. and if all elements are in use it returns -1 to indicate this.
+\lstinputlisting[firstline=37,lastline=51]{../dm556-project1/bufmgr/Clock.java}
+
 \subsection{Testing}
 
 \subsection{Conclusion}
+
+
+
+\section{Appendix}
+Pickvictim
+\lstinputlisting[firstline=37,lastline=51]{../dm556-project1/bufmgr/Clock.java}
+
+bufmgr.java
+\lstinputlisting{../dm556-project1/bufmgr/BufMgr.java}
 \end{document}
