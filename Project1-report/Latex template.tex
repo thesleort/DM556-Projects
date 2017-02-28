@@ -57,7 +57,8 @@
     Database Management Systems (DM556)  \\[4\baselineskip]
     \normalfont
 	\includegraphics[scale=1.5]{SDU_Logo}
-    \vfill\ 
+    \vfill\
+    Group 2\\
     Mark Jervelund (Mjerv15) Troels Petersen (trpet15)
     \vspace{5mm}
     IMADA \\
@@ -78,7 +79,7 @@ We worked on the project either sitting together at the university or at home re
 \subsection{Specification}
 We were tasked with implementing the following functions for the bufmgr.java\\
 
-freePage, pinPage, unpinPage, flushPage, flushAllPages, getNumBuffers, getNumUnpinned and pick victim. \\
+freePage, pinPage, unpinPage, flushPage, flushAllPages, getNumBuffers, getNumUnpinned and pickVictim. \\
 
 freePage should deallocate a page from disk.\\
 
@@ -130,10 +131,9 @@ Pickvictim is implemented to return the index for the first element with pincnt 
 \lstinputlisting[firstline=37,lastline=46, frame=single]{../dm556-project1/bufmgr/Clock.java}
 
 \subsection{Testing}
-From the testing we've done the programs gets into a neverending loop pin/unpin loop at SystemCatalog = new Catalog(false) in Minibase.java line 79 (my file with some print statements for debugging)
-\subsection{Conclusion}
+From the testing we've done the programs gets into a neverending loop pin/unpin loop at SystemCatalog = new Catalog(false) in Minibase.java at line 79 (my file with some print statements for debugging) when it tired to crate a new database.\\
 
-
+I'm assumeing its a problem with our pinpage/unpinpage that does so it makes this neverending loop.
 
 \section{Appendix}
 Pickvictim
