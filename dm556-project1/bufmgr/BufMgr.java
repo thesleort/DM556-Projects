@@ -127,9 +127,7 @@ public class BufMgr implements GlobalConst {
      * @throws IllegalStateException    if all pages are pinned (i.e. pool exceeded)
      */
     public void pinPage(PageId pageno, Page page, boolean skipRead) {
-        if (debugvalue) {
-            System.out.println("pinpage called with pageid " + pageno.pid + " Skipread " + skipRead + "and page " + page.toString());
-        }
+        if (debugvalue) System.out.println("pinpage called with pageid " + pageno.pid + " Skipread " + skipRead + "and page " + page.toString());
 
         // First check if the page is already pinned
 		FrameDesc fdesc = pagemap.get(pageno.pid);
@@ -190,9 +188,7 @@ public class BufMgr implements GlobalConst {
      * @throws IllegalArgumentException if the page is not present or not pinned
      */
     public void unpinPage(PageId pageno, boolean dirty) throws IllegalArgumentException {
-        if (debugvalue) {
-            System.out.println("unpin page called with pageid" + pageno.pid + " Dirty status " + dirty);
-        }
+        if (debugvalue) System.out.println("unpin page called with pageid" + pageno.pid + " Dirty status " + dirty);
         //Checks if page is dirty.
         // First check if the page is unpinned
         FrameDesc fdesc = pagemap.get(pageno.pid);
