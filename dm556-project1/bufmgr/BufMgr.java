@@ -207,7 +207,7 @@ public class BufMgr implements GlobalConst {
         }
         fdesc.pincnt--;
         pagemap.put(pageno.pid, fdesc);
-        replacer.pinPage(fdesc);
+        replacer.unpinPage(fdesc);
         //unpin page.
 
         return;

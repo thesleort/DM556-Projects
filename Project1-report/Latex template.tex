@@ -72,8 +72,9 @@
 
 \lstset{language=Java}          % Set your language (you can change the language for each code-block optionally)
 \section{Overall Status}
-The overall status of of project is that we 
+The overall status of of project is that we hit some bugs we that don't understand and are handing in this part of the project so we can get feedback and fix the current issues when we hand it Project 3.
 \section{Division of Labor}
+We worked on the project either sitting together at the university or at home remotely working together and spliting tasks when possible.
 \subsection{Specification}
 We were tasked with implementing the following functions for the bufmgr.java\\
 
@@ -95,19 +96,19 @@ getNumUnpinned gets the number of unpinned pages.\\
 
 Pickvictim gets the index for the first unpinned page, and returns -1 if all pages in the pool are pinned.
 
-\subsection{Design}
-
-Flushpages was implementing using Flushpage as they're almost doing the same and this reduces the amount of dubplicate code. 
+%\subsection{Design}
+%
+%Flushpages was implementing using Flushpage as they're almost %doing the same and this reduces the amount of dubplicate code. 
 
 \subsection{Implementation}
 Freepage First checks if the page is pinned. If its not, it then deallocates the page from disk.
-\lstinputlisting[firstline=132,lastline=187,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\lstinputlisting[firstline=103,lastline=110,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 \vspace{10mm}
-
+pinpage
 \lstinputlisting[firstline=100,lastline=110,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 \vspace{10mm}
 Pickvictim is implemented to return the index for the first element with pincnt 0. and if all elements are in use it returns -1 to indicate this.
-\lstinputlisting[firstline=37,lastline=51, frame=single]{../dm556-project1/bufmgr/Clock.java}
+\lstinputlisting[firstline=37,lastline=46, frame=single]{../dm556-project1/bufmgr/Clock.java}
 
 \subsection{Testing}
 From the testing we've done the programs gets into a neverending loop pin/unpin loop at SystemCatalog = new Catalog(false) in Minibase.java line 79 (my file with some print statements for debugging)
