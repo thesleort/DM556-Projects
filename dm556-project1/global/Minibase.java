@@ -78,7 +78,6 @@ public class Minibase {
         DiskManager.createDB(dbname, num_pgs);
         System.out.println("debugging line 21");
         SystemCatalog = new Catalog(false);
-
         System.out.println("flushing all pages");
         BufferManager.flushAllPages();
       }
