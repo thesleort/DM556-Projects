@@ -213,23 +213,36 @@ public class BufMgr implements GlobalConst {
 	 * Immediately writes a page in the buffer pool to disk, if dirty.
 	 */
 	public void flushPage(PageId pageno) {
+	    // Check if page is unpinned
+		FrameDesc fdesc = pagemap.get(pageno.pid);
+        if (fdesc.dirty) {
+            //writes page to disk
+            Minibase.DiskManager.write_page(fdesc.pageno, bufpool[fdesc.index]);
+            fdesc.dirty = false;
+            pagemap.put(pageno.pid, fdesc);
+            }
+    }
+    /*
+    	public void flushPage(PageId pageno) {
 
 	    // Check if page is unpinned
 		FrameDesc fdesc = pagemap.get(pageno.pid);
-
+        //TODO: It can still be fushed? its not being removed updates are just written to disk.?
 		// If it is pinned, it cannot flush the page and thus must return.
-		if (fdesc == null)  {return;}
-        if (debugvalue) System.out.println("fdesc = " + fdesc.index);
-
+		//if (fdesc.pincnt < 0)  {return;}
 		// If the page exists, it should be written to the disk.
-        if( fdesc.pageno.pid != INVALID_PAGEID) {
+        //TODO: should we even check if its invalid? doubt so?
+        //if( fdesc.pageno.pid != INVALID_PAGEID) {
             // Since it is being written to the disk, it shouldn't be in the pagemap anymore.
-            pagemap.remove(fdesc.pageno.pid);
+            //TODO We are not removing the page the the pagemap, we are just saving it to disk.?
+            //pagemap.remove(fdesc.pageno.pid);
             if (fdesc.dirty) {
                 Minibase.DiskManager.write_page(fdesc.pageno, bufpool[fdesc.index]);
             }
-        }
+        //}
     }
+
+     */
 
 	/**
 	 * Immediately writes all dirty pages in the buffer pool to disk.
@@ -255,7 +268,7 @@ public class BufMgr implements GlobalConst {
         // In the end "j" is returned, as that must be the total amount of unpinned buffer frames.
 	    int j = 0;
         for (int i = 0 ; i < Minibase.BufferManager.frametab.length; i++ ) {
-            if (0 != Minibase.BufferManager.frametab[i].state) j++;
+            if (0 == Minibase.BufferManager.frametab[i].state) j++;
         }
         return j;
     }
