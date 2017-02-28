@@ -72,9 +72,9 @@
 
 \lstset{language=Java}          % Set your language (you can change the language for each code-block optionally)
 \section{Overall Status}
-The overall status of of project is that we hit some bugs we that don't understand and are handing in this part of the project so we can get feedback and fix the current issues when we hand it Project 3.
+The overall status of of project is that we hit some bugs we that don't understand and are handing in this part of the project so we can get feedback and fix the current issues when we hand it Project 3.  Now we do not want to write excuses, but aside from the projects going on in the current semester, we also had a re-exam project that had to be handed in three days earlier. This meant that we couldn't allocate as much time to the project as we had hoped for and therefore the quality and our own opinion of the work is that we can do better than this. Time only hindered it.
 \section{Division of Labor}
-We worked on the project either sitting together at the university or at home remotely working together and spliting tasks when possible. We spent a lot of time trying to make implement pinPage, whereas the rest of the functions were simple to implement. 
+We worked on the project either sitting together at the university or at home remotely working together and spliting tasks when possible. We spent a lot of time trying to make implement pinPage, whereas we found the rest of the functions relative to pinPage, very simple to implement. The work was very evenly divided, however, Mark might have worked slightly more on the project.
 \subsection{Specification}
 We were tasked with implementing the following functions for the bufmgr.java\\
 
@@ -104,9 +104,6 @@ Pickvictim gets the index for the first unpinned page, and returns -1 if all pag
 Freepage First checks if the page is pinned. If its not, it then deallocates the page from disk.
 \lstinputlisting[firstline=103,lastline=110,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 \vspace{10mm}
-
-
-
 pinpage
 \lstinputlisting[firstline=129,lastline=129,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 First we check if the page is already in the bufferpoll if it is we increment the pin counter
@@ -118,9 +115,6 @@ If we have a non pinned frame we write this page to disk if its dirty.
 And if it isnt dirty we  copy or read the new page into the bufferpool and update the pagemap.
 \lstinputlisting[firstline=164,lastline=179,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 \vspace{10mm}
-
-
-
 unpinpage
 \lstinputlisting[firstline=189,lastline=189,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 First we check if the page is pinned. if its not we throw an exception.
@@ -128,23 +122,8 @@ First we check if the page is pinned. if its not we throw an exception.
 If its in the buffpool we decrement the pagecounter by 1, and update the pagemap with the new information.
 \lstinputlisting[firstline=198,lastline=205,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 \vspace{10mm}
-
-
-
-flushpage\\
-saves the page to disk, and updates the dirty state of the framedesc. there is some risk of redundancy due to risk of dirty being updated to false by both the flushpage and by the parent function.
-\lstinputlisting[firstline=215,lastline=224,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
-\vspace{10mm}
-flushAllPages loops over the framatab and calls flushpage on them. if they are dirty they are saved and if they are not they are not saved.
-\lstinputlisting[firstline=205,lastline=254,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
-\vspace{10mm}
-
-getNumBuffers simplys returns the lenght of the bufferpool
-\lstinputlisting[firstline=259,lastline=261,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
-\vspace{10mm}
-
-getNumUnpinned
-\lstinputlisting[firstline=266,lastline=274,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+flushpage
+\lstinputlisting[firstline=215,lastline=215,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 \vspace{10mm}
 
 Pickvictim is implemented to return the index for the first element with pincnt 0. and if all elements are in use it returns -1 to indicate this.
@@ -155,11 +134,11 @@ From the testing we've done the programs gets into a neverending loop pin/unpin 
 \subsection{Conclusion}
 
 
-\newpage
+
 \section{Appendix}
-pickVictim in Clock.java
+Pickvictim
 \lstinputlisting[firstline=37,lastline=46, frame=single]{../dm556-project1/bufmgr/Clock.java}
 
-BufMgr.java
+bufmgr.java
 \lstinputlisting[frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 \end{document}
