@@ -17,7 +17,7 @@ import global.PageId;
  */
 @SuppressWarnings("unused")
 public class BufMgr implements GlobalConst {
-	
+
 	/** Actual pool of pages (can be viewed as an array of byte arrays). */
 	protected Page[] bufpool;
 
@@ -31,10 +31,10 @@ public class BufMgr implements GlobalConst {
 
 	/** The replacement policy to use. */
 	protected Replacer replacer;
-	
+
 	/**
 	 * Constructs a buffer manager with the given settings.
-	 * 
+	 *
 	 * @param numbufs: number of pages in the buffer pool
 	 */
 
@@ -46,7 +46,7 @@ public class BufMgr implements GlobalConst {
 	      bufpool[i] = new Page();
 	      frametab[i] = new FrameDesc(i);
 	    }
-	    
+
 	    // initialize the specialized page map and replacer
 	    pagemap = new HashMap<Integer, FrameDesc>(numbufs);
 	    replacer = new Clock(this);
@@ -55,9 +55,9 @@ public class BufMgr implements GlobalConst {
 	/**
 	 * Allocates a set of new pages, and pins the first one in an appropriate
 	 * frame in the buffer pool.
-	 * 
+	 *
 	 * @param firstpg
-	 *            holds the contents of the first page 
+	 *            holds the contents of the first page
 	 * @param run_size
 	 *            number of new pages to allocate
 	 * @return page id of the first new page
@@ -69,7 +69,7 @@ public class BufMgr implements GlobalConst {
 	public PageId newPage(Page firstpg, int run_size) {
 		// allocate the run
 		PageId firstid = Minibase.DiskManager.allocate_page(run_size);
-		
+
 		// try to pin the first page
         System.out.println("trying to pin the first page");
         try {pinPage(firstid, firstpg, PIN_MEMCPY);}
@@ -91,7 +91,7 @@ public class BufMgr implements GlobalConst {
 	/**
 	 * Deallocates a single page from disk, freeing it from the pool if needed.
 	 * Call Minibase.DiskManager.deallocate_page(pageno) to deallocate the page before return.
-	 * 
+	 *
 	 * @param pageno
 	 *            identifies the page to remove
 	 * @throws IllegalArgumentException
@@ -107,14 +107,14 @@ public class BufMgr implements GlobalConst {
 	/**
 	 * Pins a disk page into the buffer pool. If the page is already pinned,
 	 * this simply increments the pin count. Otherwise, this selects another
-	 * page in the pool to replace, flushing the replaced page to disk if 
+	 * page in the pool to replace, flushing the replaced page to disk if
 	 * it is dirty.
-	 * 
-	 * (If one needs to copy the page from the memory instead of reading from 
-	 * the disk, one should set skipRead to PIN_MEMCPY. In this case, the page 
+	 *
+	 * (If one needs to copy the page from the memory instead of reading from
+	 * the disk, one should set skipRead to PIN_MEMCPY. In this case, the page
 	 * shouldn't be in the buffer pool. Throw an IllegalArgumentException if so. )
-	 * 
-	 * 
+	 *
+	 *
 	 * @param pageno
 	 *            identifies the page to pin
 	 * @param page
@@ -128,7 +128,9 @@ public class BufMgr implements GlobalConst {
 	 *             if all pages are pinned (i.e. pool exceeded)
 	 */
 	public void pinPage(PageId pageno, Page page, boolean skipRead) {
-        System.out.println("pinpage called with pageid "+pageno.pid+" Skipread "+skipRead+"and page "+ page.toString());
+        if(debugvalue){
+            System.out.println("pinpage called with pageid "+pageno.pid+" Skipread "+skipRead+"and page "+ page.toString());
+        }
         //first check if the page is already pinned
 		FrameDesc fdesc = pagemap.get(pageno.pid);
         if (fdesc != null) {
@@ -184,7 +186,7 @@ public class BufMgr implements GlobalConst {
 
 	/**
 	 * Unpins a disk page from the buffer pool, decreasing its pin count.
-	 * 
+	 *
 	 * @param pageno
 	 *            identifies the page to unpin
 	 * @param dirty
@@ -193,8 +195,9 @@ public class BufMgr implements GlobalConst {
 	 *             if the page is not present or not pinned
 	 */
 	public void unpinPage(PageId pageno, boolean dirty) throws IllegalArgumentException {
-        System.out.println("unpin page called with pageid"+pageno.pid+" Dirty status "+dirty);
-
+        if(debugvalue) {
+            System.out.println("unpin page called with pageid" + pageno.pid + " Dirty status " + dirty);
+        }
         //Checks if page is dirty.
         //first check if the page is unpinned
         FrameDesc fdesc = pagemap.get(pageno.pid);
@@ -207,7 +210,7 @@ public class BufMgr implements GlobalConst {
         }
         fdesc.pincnt--;
         pagemap.put(pageno.pid, fdesc);
-        replacer.unpinPage(fdesc);
+        replacer.pinPage(fdesc);
         //unpin page.
 
 	    return;
