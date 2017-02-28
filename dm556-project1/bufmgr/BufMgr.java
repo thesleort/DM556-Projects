@@ -131,39 +131,40 @@ public class BufMgr implements GlobalConst {
         if(debugvalue){
             System.out.println("pinpage called with pageid "+pageno.pid+" Skipread "+skipRead+"and page "+ page.toString());
         }
-        //first check if the page is already pinned
+
+        // First check if the page is already pinned
 		FrameDesc fdesc = pagemap.get(pageno.pid);
         if (fdesc != null) {
 
-		    //Validate the pin method
+		    // Validate the pin method
 			if (skipRead == PIN_MEMCPY && fdesc.pincnt > 0) throw new IllegalArgumentException(
                     "Page pinned; PIN_MEMCPY not allowed"
             );
-            //increment pin count, notify the replacer, and wrap the buffer.
+            // Increment pin count, notify the replacer, and wrap the buffer.
 			fdesc.pincnt++;
             replacer.pinPage(fdesc);
 			page.setPage(bufpool[fdesc.index]);
             return;
-		} // if in pool
+		} // If in pool
 
-		// select an available frame
+		// Select an available frame
 		int frameNo = replacer.pickVictim();
+        // If no pages are unpinned, then throw an exception telling that.
 		if (frameNo < 0){
 			throw new IllegalStateException("All pages pinned.");
         }
-//        System.out.println(frameNo);
-//        System.out.println("skipread = " +skipRead);
-        //fdesc.pageno.pid = frameNo;
-        //Minibase.BufferManager.frametab[frameNo] = fdesc;
 
+        // Pick the frame that is not pinned.
 		fdesc = Minibase.BufferManager.frametab[frameNo];
 
+		// If the frame was in use and dirty, it should write it to the disk.
 		if( fdesc.pageno.pid != INVALID_PAGEID) {
 				pagemap.remove(fdesc.pageno.pid);
 				if(fdesc.dirty) {
 					Minibase.DiskManager.write_page(fdesc.pageno, bufpool[frameNo]);
 				}
 			}
+
 		//read in the page if requested, and wrap the buffer
 		if(skipRead == PIN_MEMCPY) {
 			bufpool[frameNo].copyPage(page);
@@ -171,17 +172,15 @@ public class BufMgr implements GlobalConst {
 			Minibase.DiskManager.read_page(pageno, bufpool[frameNo]);
 		}
 		page.setPage(bufpool[frameNo]);
-//        if (debugvalue) {System.out.println("Pageno = " + pageno.pid);}
+
 		//update the frame descriptor
+        fdesc.pageno.pid = pageno.pid;
+        fdesc.pincnt = 1;
+        fdesc.dirty = false;
 
-			fdesc.pageno.pid = pageno.pid;
-			fdesc.pincnt = 1;
-			fdesc.dirty = false;
-
-			pagemap.put(pageno.pid, fdesc);
-			replacer.pinPage(fdesc);
-
-
+        // Pin the page and tell that it is pinned, by adding it to the pagemap.
+        pagemap.put(pageno.pid, fdesc);
+        replacer.pinPage(fdesc);
 	}
 
 	/**
@@ -199,12 +198,15 @@ public class BufMgr implements GlobalConst {
             System.out.println("unpin page called with pageid" + pageno.pid + " Dirty status " + dirty);
         }
         //Checks if page is dirty.
-        //first check if the page is unpinned
+        // First check if the page is unpinned
         FrameDesc fdesc = pagemap.get(pageno.pid);
 
+        // If page is unpinned, then throw an exception telling that.
         if (fdesc == null) throw new IllegalArgumentException(
                 "Page not pinned;"
         );
+
+
         if (dirty){
             flushPage(pageno);
         }

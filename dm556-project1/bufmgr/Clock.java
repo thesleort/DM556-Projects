@@ -36,18 +36,13 @@ public class Clock extends Replacer{
 
 	@Override
 	public int pickVictim() {
-		// TODO Auto-generated method stub
-
-		if(Minibase.BufferManager.frametab == null) {
-//            System.out.println("frametab null");
-        }
+        // Finds the first element in the frametab array, where pin count is equal to zero and returns it.
 		for (int i = 0; i < Minibase.BufferManager.frametab.length; i++) {
             if(Minibase.BufferManager.frametab[i].pincnt == 0) {
-//                System.out.println("Victim is = " +i);
                 return i;
 			}
 		}
-			return -1;
-		}
-
+		// If no pages has zero pins, then it returns -1.
+        return -1;
+    }
 }
