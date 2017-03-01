@@ -75,7 +75,9 @@ public class BufMgr implements GlobalConst {
         PageId firstid = Minibase.DiskManager.allocate_page(run_size);
 
         // try to pin the first page
-        System.out.println("trying to pin the first page");
+        if (debugvalue) {
+            System.out.println("trying to pin the first page");
+        }
         try {
             pinPage(firstid, firstpg, PIN_MEMCPY);
         } catch (RuntimeException exc) {
@@ -102,8 +104,14 @@ public class BufMgr implements GlobalConst {
      */
     public void freePage(PageId pageno) throws IllegalArgumentException {
         FrameDesc fdesc = pagemap.get(pageno.pid);
-
-        if (fdesc.pincnt > 0) {
+        if (debugvalue){
+            System.out.println("freeing page with id "+pageno.pid);
+        }
+        if (fdesc == null){
+            return;
+            //throw new IllegalArgumentException( "page does not excists");
+        }
+        if (fdesc.pincnt != 0) {
             throw new IllegalArgumentException("The page is pinned.");
         }
         Minibase.DiskManager.deallocate_page(pageno);
@@ -226,7 +234,9 @@ public class BufMgr implements GlobalConst {
 	 */
 	public void flushAllPages() {
 	    for (int i = 0 ; i < Minibase.BufferManager.frametab.length; i++ ){
-            System.out.println("flushing page "+ Minibase.BufferManager.frametab[i].pageno.pid);
+            if (debugvalue) {
+                System.out.println("flushing page " + Minibase.BufferManager.frametab[i].pageno.pid);
+            }
             if (Minibase.BufferManager.frametab[i].pageno.pid > 0) {
                 flushPage(Minibase.BufferManager.frametab[i].pageno);
             }
