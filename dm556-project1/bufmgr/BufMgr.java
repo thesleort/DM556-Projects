@@ -107,13 +107,14 @@ public class BufMgr implements GlobalConst {
         if (debugvalue){
             System.out.println("freeing page with id "+pageno.pid);
         }
-        if (fdesc == null){
+        if (fdesc != null){
+            if (fdesc.pincnt != 0) {
+                throw new IllegalArgumentException("The page is pinned.");
+            }
             return;
             //throw new IllegalArgumentException( "page does not excists");
         }
-        if (fdesc.pincnt != 0) {
-            throw new IllegalArgumentException("The page is pinned.");
-        }
+
         Minibase.DiskManager.deallocate_page(pageno);
     }
 
