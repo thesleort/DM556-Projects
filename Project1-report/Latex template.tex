@@ -30,7 +30,7 @@
 
 \newcommand{\Z}{\mathbb{Z}}
 \lhead{Database Management Systems (DM556))}
-\rhead{Mark Jervelund (Mjerv15) Troels Petersen (trpet15)}
+\rhead{Mark Jervelund (Mjerv15) Troels B. Petersen (trpet15)}
 \rfoot{Page  \thepage \, of \pageref{LastPage}}
 \counterwithin*{equation}{section}
 
@@ -73,9 +73,9 @@
 
 \lstset{language=Java}          % Set your language (you can change the language for each code-block optionally)
 \section{Overall Status}
-The overall status of of project is that we hit some bugs we that don't understand and are handing in this part of the project so we can get feedback and fix the current issues when we hand it Project 3.  Now we do not want to write excuses, but aside from the projects going on in the current semester, we also had a re-exam project that had to be handed in three days earlier. This meant that we couldn't allocate as much time to the project as we had hoped for and therefore the quality and our own opinion of the work is that we can do better than this. Time only hindered it.
+While there was some bugs in the original hand-in, all of those have been fixed in this re-assignment. Therefore this hand-in passes all the tests in \textsf{BMTest.java}.
 \section{Division of Labor}
-We worked on the project either sitting together at the university or at home remotely working together and spliting tasks when possible. We spent a lot of time trying to make implement pinPage, whereas we found the rest of the functions relative to pinPage, very simple to implement. The work was very evenly divided, however, Mark might have worked slightly more on the project.
+We worked on the project either sitting together at the university or at home remotely working together and spliting tasks when possible. We spent a lot of time trying to make fix pinPage, whereas we found the rest of the functions relative to pinPage, very simple to implement. The work was very evenly divided.
 \subsection{Specification}
 We were tasked with implementing the following functions for the bufmgr.java\\
 
@@ -103,41 +103,39 @@ Pickvictim gets the index for the first unpinned page, and returns -1 if all pag
 
 \subsection{Implementation}
 Freepage First checks if the page is pinned. If its not, it then deallocates the page from disk.
-\lstinputlisting[firstline=103,lastline=110,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\lstinputlisting[firstnumber=103,firstline=103,lastline=110,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 \vspace{10mm}
 pinpage
-\lstinputlisting[firstline=129,lastline=129,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\lstinputlisting[firstnumber=129,firstline=129,lastline=129,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 First we check if the page is already in the bufferpoll if it is we increment the pin counter
-\lstinputlisting[firstline=133,lastline=145,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\lstinputlisting[firstnumber=133,firstline=133,lastline=145,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 If it isnt we pick a victim, and if there isnt any victims we throw an IllegalStateException.
-\lstinputlisting[firstline=147,lastline=152,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\lstinputlisting[firstnumber=147,firstline=147,lastline=152,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 If we have a non pinned frame we write this page to disk if its dirty.
-\lstinputlisting[firstline=154,lastline=160,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\lstinputlisting[firstnumber=154,firstline=154,lastline=160,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 And if it isnt dirty we  copy or read the new page into the bufferpool and update the pagemap.
-\lstinputlisting[firstline=164,lastline=179,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\lstinputlisting[firstnumber=164,firstline=164,lastline=179,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 \vspace{10mm}
 unpinpage
-\lstinputlisting[firstline=189,lastline=189,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\lstinputlisting[firstnumber=189,firstline=189,lastline=189,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 First we check if the page is pinned. if its not we throw an exception.
-\lstinputlisting[firstline=193,lastline=196,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\lstinputlisting[firstnumber=193,firstline=193,lastline=196,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 If its in the buffpool we decrement the pagecounter by 1, and update the pagemap with the new information.
-\lstinputlisting[firstline=198,lastline=205,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\lstinputlisting[firstnumber=198,firstline=198,lastline=205,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 \vspace{10mm}
 flushpage
 \lstinputlisting[firstline=215,lastline=215,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
 \vspace{10mm}
 
-Pickvictim is implemented to return the index for the first element with pincnt 0. and if all elements are in use it returns -1 to indicate this.
-\lstinputlisting[firstline=37,lastline=46, frame=single]{../dm556-project1/bufmgr/Clock.java}
+Pickvictim is implemented to return the index for the first element with pincnt 0. and if all elements are in use, it returns -1 to indicate this.
+\lstinputlisting[firstnumber=37,firstline=37,lastline=46, frame=single]{../dm556-project1/bufmgr/Clock.java}
 
 \subsection{Testing}
-From the testing we've done the programs gets into a neverending loop pin/unpin loop at SystemCatalog = new Catalog(false) in Minibase.java at line 79 (my file with some print statements for debugging) when it tired to crate a new database.\\
-
-I'm assumeing its a problem with our pinpage/unpinpage that does so it makes this neverending loop.
+Testing this time around was very successful, assuming it passes in the tests where it returns "failed as expected". It reports that test1, test2 and test3 completed successfully.
 
 \section{Appendix}
 Pickvictim
-\lstinputlisting[firstline=37,lastline=46, frame=single]{../dm556-project1/bufmgr/Clock.java}
+\lstinputlisting[firstnumber=37,firstline=37,lastline=46, frame=single]{../dm556-project1/bufmgr/Clock.java}
 
 bufmgr.java
 \lstinputlisting[frame=single]{../dm556-project1/bufmgr/BufMgr.java}
