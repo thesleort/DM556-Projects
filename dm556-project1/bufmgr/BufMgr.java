@@ -107,14 +107,13 @@ public class BufMgr implements GlobalConst {
         if (debugvalue){
             System.out.println("freeing page with id "+pageno.pid);
         }
-        if (fdesc != null){
+        if (fdesc != null) {
             if (fdesc.pincnt != 0) {
                 throw new IllegalArgumentException("The page is pinned.");
             }
             return;
             //throw new IllegalArgumentException( "page does not excists");
         }
-
         Minibase.DiskManager.deallocate_page(pageno);
     }
 
@@ -139,7 +138,7 @@ public class BufMgr implements GlobalConst {
         if (debugvalue) System.out.println("pinpage called with pageid " + pageno.pid + " Skipread " + skipRead + "and page " + page.toString());
 
         // First check if the page is already pinned
-		FrameDesc fdesc = pagemap.get(pageno.pid);
+		FrameDesc fdesc = Minibase.BufferManager.pagemap.get(pageno.pid);
         if (fdesc != null) {
 
 		    // Validate the pin method
@@ -261,7 +260,6 @@ public class BufMgr implements GlobalConst {
         for (int i = 0 ; i < Minibase.BufferManager.frametab.length; i++ ) {
             if (0 == Minibase.BufferManager.frametab[i].pincnt) j++;
         }
-//        System.out.println("there is "+j+" unpinned frames out of "+Minibase.BufferManager.frametab.length);
         return j;
     }
 
