@@ -9,8 +9,10 @@ public class Selection extends Iterator {
 
   /**
    * Constructs a selection, given the underlying iterator and predicates.
+   * TODO
    */
   public Selection(Iterator iter, Predicate... preds) {
+
     throw new UnsupportedOperationException("Not implemented");
   }
 

@@ -4,7 +4,9 @@ package relop;
 public class MergeJoin extends Iterator {
 	
 	
-	
+	/*
+	 * TODO
+	 */
 	public MergeJoin(Iterator left, Iterator right, Integer lcol, Integer rcol){
 		throw new UnsupportedOperationException("Not implemented");
 		
