@@ -1,0 +1,51 @@
+Test 1 completed without exception.
+--------------------------------------
+	Reads	Writes	Allocs	Pinned
+--------------------------------------
+insert	0	8	7	0
+select	0	0	0	0
+project	0	0	0	0
+both	0	0	0	0
+--------------------------------------
+
+
+Test 2: Sorting Test
+
+...Inserted
+
+ ~> sort numbers
+
+ cheking the result.
+
+
+ Test 2 completed without error.
+
+Test 3: MergeJoin operator
+
+DriverId  FirstName           LastName            Age       NumSeats  DriverId  GroupId   FromDate  ToDate    
+--------------------------------------------------------------------------------------------------------------
+1         Ahmed               Elmagarmid          25.0      5         1         2         2/12/2006 2/14/2006 
+1         Ahmed               Elmagarmid          25.0      5         1         3         2/15/2006 2/16/2006 
+2         Walid               Aref                27.0      13        2         6         2/17/2006 2/20/2006 
+2         Walid               Aref                27.0      13        2         7         2/18/2006 2/23/2006 
+3         Christopher         Clifton             18.0      4         3         5         2/10/2006 2/13/2006 
+3         Christopher         Clifton             18.0      4         3         4         2/18/2006 2/19/2006 
+3         Christopher         Clifton             18.0      4         3         2         2/24/2006 2/26/2006 
+4         Sunil               Prabhakar           22.0      7         4         1         2/19/2006 2/19/2006 
+5         Elisa               Bertino             26.0      5         5         7         2/14/2006 2/18/2006 
+6         Susanne             Hambrusch           23.0      3         6         6         2/25/2006 2/26/2006 
+8         Arif                Ghafoor             20.0      5         8         5         2/20/2006 2/22/2006 
+9         Jeff                Vitter              19.0      10        9         1         2/15/2006 2/15/2006 
+
+
+Test 3 completed without exception.
+--------------------------------------
+	Reads	Writes	Allocs	Pinned
+--------------------------------------
+driver2	0	3	2	0
+rides2	0	3	2	0
+m_join	0	0	0	2
+--------------------------------------
+
+
+All basic relational operator tests completed; verify output for correctness.
