@@ -29,8 +29,8 @@ public class Selection extends Iterator {
     //this.schema(depth);
     System.out.print("Selection : ");
 
-    for(int var2 = 0; var2 < this.predicates.length - 1; ++var2) {
-      System.out.print(this.predicates[var2].toString() + " OR ");
+    for(int i = 0; i < this.predicates.length - 1; ++i) {
+      System.out.print(this.predicates[i].toString() + " OR ");
     }
 
     System.out.println(this.predicates[this.predicates.length - 1]);
@@ -69,8 +69,8 @@ public class Selection extends Iterator {
     while(this.iterator.hasNext()) {
       this.tuple = this.iterator.getNext();
 
-      for(int var1 = 0; var1 < this.predicates.length; ++var1) {
-        if(this.predicates[var1].evaluate(this.tuple)) {
+      for(int i = 0; i < this.predicates.length; ++i) {
+        if(this.predicates[i].evaluate(this.tuple)) {
           return true;
         }
       }
@@ -88,9 +88,9 @@ public class Selection extends Iterator {
     if(this.tuple == null) {
       throw new IllegalStateException("no more tuples");
     } else {
-      Tuple var1 = this.tuple;
+      Tuple tuple = this.tuple;
       this.tuple = null;
-      return var1;
+      return tuple;
     }
   }
 

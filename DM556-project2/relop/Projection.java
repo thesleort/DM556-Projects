@@ -13,8 +13,8 @@ public class Projection extends Iterator {
   public Projection(Iterator iter, Integer... fields) {
     this.schema = new Schema(fields.length);
 
-    for(int var3 = 0; var3 < fields.length; ++var3) {
-      this.schema.initField(var3, iter.schema, fields[var3].intValue());
+    for(int i = 0; i < fields.length; ++i) {
+      this.schema.initField(i, iter.schema, fields[i].intValue());
     }
 
     this.iterator = iter;
@@ -29,8 +29,8 @@ public class Projection extends Iterator {
     //this.schema(depth);
     System.out.print("Projection : ");
 
-    for(int var2 = 0; var2 < this.integers.length - 1; ++var2) {
-      System.out.print("{" + this.integers[var2] + "}, ");
+    for(int i = 0; i < this.integers.length - 1; ++i) {
+      System.out.print("{" + this.integers[i] + "}, ");
     }
 
     System.out.println("{" + this.integers[this.integers.length - 1] + "}");
@@ -75,14 +75,14 @@ public class Projection extends Iterator {
    * @throws IllegalStateException if no more tuples
    */
   public Tuple getNext() {
-    Tuple var1 = this.iterator.getNext();
-    Tuple var2 = new Tuple(this.schema);
+    Tuple nextTuple = this.iterator.getNext();
+    Tuple newTuple = new Tuple(this.schema);
 
-    for(int var3 = 0; var3 < this.integers.length; ++var3) {
-      var2.setField(var3, var1.getField(this.integers[var3].intValue()));
+    for(int i = 0; i < this.integers.length; ++i) {
+      newTuple.setField(i, nextTuple.getField(this.integers[i].intValue()));
     }
 
-    return var2;
+    return newTuple;
   }
 
 } // public class Projection extends Iterator
