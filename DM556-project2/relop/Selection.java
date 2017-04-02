@@ -15,10 +15,10 @@ public class Selection extends Iterator {
    * TODO
    */
   public Selection(Iterator iter, Predicate... preds) {
-    this.iterator = iter;       // o
-    this.predicates = preds;    // q
-    this.schema = iter.schema;  // a
-    this.tuple = null;          // p
+    this.iterator = iter;
+    this.predicates = preds;
+    this.schema = iter.schema;
+    this.tuple = null;
   }
 
   /**

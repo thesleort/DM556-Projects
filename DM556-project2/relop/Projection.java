@@ -5,8 +5,8 @@ package relop;
  * relational algebra, this operator does NOT eliminate duplicate tuples.
  */
 public class Projection extends Iterator {
-  protected Iterator iterator; //do
-  protected Integer[] integers;//if
+  protected Iterator iterator;
+  protected Integer[] integers;
   /**
    * Constructs a projection, given the underlying iterator and field numbers.
    */
