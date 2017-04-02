@@ -7,13 +7,18 @@ package relop;
  */
 public class Selection extends Iterator {
 
+  protected Iterator iterator;
+  protected Predicate[] predicates;
+  protected Tuple tuple;
   /**
    * Constructs a selection, given the underlying iterator and predicates.
    * TODO
    */
   public Selection(Iterator iter, Predicate... preds) {
-
-    throw new UnsupportedOperationException("Not implemented");
+    this.iterator = iter;       // o
+    this.predicates = preds;    // q
+    this.schema = iter.schema;  // a
+    this.tuple = null;          // p
   }
 
   /**
@@ -21,35 +26,57 @@ public class Selection extends Iterator {
    * child iterators, and increases the indent depth along the way.
    */
   public void explain(int depth) {
-    throw new UnsupportedOperationException("Not implemented");
+    //this.schema(depth);
+    System.out.print("Selection : ");
+
+    for(int var2 = 0; var2 < this.predicates.length - 1; ++var2) {
+      System.out.print(this.predicates[var2].toString() + " OR ");
+    }
+
+    System.out.println(this.predicates[this.predicates.length - 1]);
+    this.iterator.explain(depth + 1);
   }
 
   /**
    * Restarts the iterator, i.e. as if it were just constructed.
    */
   public void restart() {
-    throw new UnsupportedOperationException("Not implemented");
+    this.iterator.restart();
+    this.tuple = null;
   }
 
   /**
    * Returns true if the iterator is open; false otherwise.
    */
   public boolean isOpen() {
-    throw new UnsupportedOperationException("Not implemented");
+    return this.iterator != null;
   }
 
   /**
    * Closes the iterator, releasing any resources (i.e. pinned pages).
    */
   public void close() {
-    throw new UnsupportedOperationException("Not implemented");
+    if(this.iterator != null) {
+      this.iterator.close();
+      this.iterator = null;
+    }
   }
 
   /**
    * Returns true if there are more tuples, false otherwise.
    */
   public boolean hasNext() {
-    throw new UnsupportedOperationException("Not implemented");
+    while(this.iterator.hasNext()) {
+      this.tuple = this.iterator.getNext();
+
+      for(int var1 = 0; var1 < this.predicates.length; ++var1) {
+        if(this.predicates[var1].evaluate(this.tuple)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   /**
@@ -58,7 +85,13 @@ public class Selection extends Iterator {
    * @throws IllegalStateException if no more tuples
    */
   public Tuple getNext() {
-    throw new UnsupportedOperationException("Not implemented");
+    if(this.tuple == null) {
+      throw new IllegalStateException("no more tuples");
+    } else {
+      Tuple var1 = this.tuple;
+      this.tuple = null;
+      return var1;
+    }
   }
 
 } // public class Selection extends Iterator
