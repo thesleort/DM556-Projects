@@ -50,7 +50,7 @@
     \vspace*{9\baselineskip}
     \huge
     \bfseries
-    Project 2\\
+    Project 1\\
     
     \normalfont 
 	\huge    
@@ -59,7 +59,7 @@
 	\includegraphics[scale=1.5]{SDU_Logo}
     \vfill\
     Group 2\\
-    Mark Jervelund (Mjerv15) Troels B. Petersen (trpet15)
+    Mark Jervelund (Mjerv15) Troels Petersen (trpet15)
     \vspace{5mm}
     IMADA \\
     \textbf{\datedate} \\[2\baselineskip]
@@ -73,24 +73,10 @@
 
 \lstset{language=Java}          % Set your language (you can change the language for each code-block optionally)
 \section{Overall Status}
-The group managed to complete the tasks and therefore the project is considered complete.
+While there was some bugs in the original hand-in, all of those have been fixed in this re-assignment. Therefore this hand-in passes all the tests in \textsf{BMTest.java}.
 \section{Division of Labor}
-The group worked on the project either sitting together at the university or at home remotely working together and spliting tasks when possible. A lot of the time was spent understanding how to implement a solution. Especially Sort and Merge-Join was not very straight forward. The work was very evenly divided - both when writing the code, but also when writing the report.
+We worked on the project either sitting together at the university or at home remotely working together and spliting tasks when possible. We spent a lot of time trying to make fix pinPage, whereas we found the rest of the functions relative to pinPage, very simple to implement. The work was very evenly divided.
 \subsection{Specification}
-The group was tasked with implementing four operators; Selection, Projection, Sort and Merge-Join.
-
-\subsubsection{Selection}
-Selection is a very basic operation in database management. It uses relational algebra to select the elements. Now the spec for this operator says that every query is combined with a relational \textit{or}. This means that nothing "fancy" has to be done. It should simply select everytime one or more queries return true.
-\subsubsection{Projection}
-The projection is also one of the more basic operations in database management. A projection extracts the columns from a relation, however, unlike in relational algebra, this operater does not eliminate duplicates.
-\subsubsection{Sort}
-Sort has to be external. External sorting is used in applications where huge amounts of data has to be sorted, thus the data has to sorted in chunks since it cannot all be in main memory. A variant of merge-sort will be used, since it can sort on parts of the data and then combine the sorted parts.
-\subsubsection{Join}
-
-
-
-
-
 We were tasked with implementing the following functions for the bufmgr.java\\
 
 freePage, pinPage, unpinPage, flushPage, flushAllPages, getNumBuffers, getNumUnpinned and pick victim. \\
