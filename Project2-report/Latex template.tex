@@ -1,0 +1,142 @@
+	%Template by Mark Jervelund - D1 - 2015 - mjerv15@student.sdu.dk
+
+\documentclass[a4paper,10pt,titlepage]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage[document]{ragged2e}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{datenumber}
+\usepackage{venndiagram}
+\usepackage{chngcntr}
+\setdatetoday
+\addtocounter{datenumber}{0} %date for dilierry standard is today
+\setdatebynumber{\thedatenumber}
+\date{}
+\setcounter{secnumdepth}{0}
+\pagestyle{fancy}
+\fancyhf{}
+
+\newcommand{\Z}{\mathbb{Z}}
+\lhead{Database Management Systems (DM556))}
+\rhead{Mark Jervelund (Mjerv15) Troels B. Petersen (trpet15)}
+\rfoot{Page  \thepage \, of \pageref{LastPage}}
+\counterwithin*{equation}{section}
+
+\lstset{
+  numbers=left,
+  stepnumber=5,    
+  firstnumber=1,
+  numberfirstline=true
+  frame=single,
+  breaklines=true,
+  postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}
+}
+
+\begin{document}
+\begin{titlepage}
+\centering
+    \vspace*{9\baselineskip}
+    \huge
+    \bfseries
+    Project 1\\
+    
+    \normalfont 
+	\huge    
+    Database Management Systems (DM556)  \\[4\baselineskip]
+    \normalfont
+	\includegraphics[scale=1.5]{SDU_Logo}
+    \vfill\
+    Group 2\\
+    Mark Jervelund (Mjerv15) Troels Petersen (trpet15)
+    \vspace{5mm}
+    IMADA \\
+    \textbf{\datedate} \\[2\baselineskip]
+\end{titlepage}
+%\renewcommand{\thepage}{\roman{page}}% Roman numerals for page counter
+%\tableofcontents
+
+%\newpage
+\setcounter{page}{1}
+\renewcommand{\thepage}{\arabic{page}}
+
+\lstset{language=Java}          % Set your language (you can change the language for each code-block optionally)
+\section{Overall Status}
+While there was some bugs in the original hand-in, all of those have been fixed in this re-assignment. Therefore this hand-in passes all the tests in \textsf{BMTest.java}.
+\section{Division of Labor}
+We worked on the project either sitting together at the university or at home remotely working together and spliting tasks when possible. We spent a lot of time trying to make fix pinPage, whereas we found the rest of the functions relative to pinPage, very simple to implement. The work was very evenly divided.
+\subsection{Specification}
+We were tasked with implementing the following functions for the bufmgr.java\\
+
+freePage, pinPage, unpinPage, flushPage, flushAllPages, getNumBuffers, getNumUnpinned and pick victim. \\
+
+freePage should deallocate a page from disk.\\
+
+Pinpage should pin a page by incrementing the pincnt by 1, or by loading it into the bufferpool if it isnt in the bufferpool already.\\
+
+Unpinpage should unpin a page, flush it to disk if its dirty and reduce the pincount by 1.\\
+
+Flushpage should save a page to disk if dirty.\\
+
+Flushpages should write all pages to disk if they're dirty.\\
+
+getNumBuffers gets the amount of buffers.\\
+
+getNumUnpinned gets the number of unpinned pages.\\
+
+Pickvictim gets the index for the first unpinned page, and returns -1 if all pages in the pool are pinned.
+
+%\subsection{Design}
+%
+%Flushpages was implementing using Flushpage as they're almost %doing the same and this reduces the amount of dubplicate code. 
+
+\subsection{Implementation}
+Freepage First checks if the page is pinned. If its not, it then deallocates the page from disk.
+\lstinputlisting[firstnumber=105,firstline=105,lastline=118,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\vspace{10mm}
+pinpage
+\lstinputlisting[firstnumber=137,firstline=137,lastline=137,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+First we check if the page is already in the bufferpoll if it is we increment the pin counter
+\lstinputlisting[firstnumber=141,firstline=141,lastline=152,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+If it isnt we pick a victim, and if there isnt any victims we throw an IllegalStateException.
+\lstinputlisting[firstnumber=155,firstline=155,lastline=159,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+If we have a non pinned frame we write this page to disk if its dirty.
+\lstinputlisting[firstnumber=162,firstline=162,lastline=168,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+And if it isnt dirty we  copy or read the new page into the bufferpool and update the pagemap.
+\lstinputlisting[firstnumber=170,firstline=170,lastline=186,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\vspace{10mm}
+unpinpage
+\lstinputlisting[firstnumber=195,firstline=195,lastline=195,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+First we check if the page is pinned. if its not we throw an exception.
+\lstinputlisting[firstnumber=199,firstline=199,lastline=202,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+If its in the buffpool we decrement the pagecounter by 1, and update the pagemap with the new information.
+\lstinputlisting[firstnumber=204,firstline=204,lastline=211,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\vspace{10mm}
+flushpage
+\lstinputlisting[firstnumber=220, firstline=220,lastline=220,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\vspace{10mm}
+
+Pickvictim is implemented to return the index for the first element with pincnt 0. and if all elements are in use, it returns -1 to indicate this.
+\lstinputlisting[firstnumber=37,firstline=37,lastline=46, frame=single]{../dm556-project1/bufmgr/Clock.java}
+
+\subsection{Testing}
+Testing this time around was very successful, assuming it passes in the tests where it returns "failed as expected". It reports that test1, test2 and test3 completed successfully.
+
+\section{Appendix}
+Pickvictim
+\lstinputlisting[firstnumber=37,firstline=37,lastline=46, frame=single]{../dm556-project1/bufmgr/Clock.java}
+
+bufmgr.java
+\lstinputlisting[frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\end{document}
