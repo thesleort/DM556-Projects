@@ -14,7 +14,7 @@ public class Projection extends Iterator {
     this.schema = new Schema(fields.length);
 
     for(int i = 0; i < fields.length; ++i) {
-      this.schema.initField(i, iter.schema, fields[i].intValue());
+      this.schema.initField(i, iter.schema, fields[i]);
     }
 
     this.iterator = iter;
@@ -79,7 +79,7 @@ public class Projection extends Iterator {
     Tuple newTuple = new Tuple(this.schema);
 
     for(int i = 0; i < this.integers.length; ++i) {
-      newTuple.setField(i, nextTuple.getField(this.integers[i].intValue()));
+      newTuple.setField(i, nextTuple.getField(this.integers[i]));
     }
 
     return newTuple;

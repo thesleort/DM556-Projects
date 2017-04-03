@@ -12,7 +12,6 @@ public class Selection extends Iterator {
   protected Tuple tuple;
   /**
    * Constructs a selection, given the underlying iterator and predicates.
-   * TODO
    */
   public Selection(Iterator iter, Predicate... preds) {
     this.iterator = iter;
@@ -26,7 +25,6 @@ public class Selection extends Iterator {
    * child iterators, and increases the indent depth along the way.
    */
   public void explain(int depth) {
-    //this.schema(depth);
     System.out.print("Selection : ");
 
     for(int i = 0; i < this.predicates.length - 1; ++i) {
@@ -68,14 +66,12 @@ public class Selection extends Iterator {
   public boolean hasNext() {
     while(this.iterator.hasNext()) {
       this.tuple = this.iterator.getNext();
-
       for(int i = 0; i < this.predicates.length; ++i) {
         if(this.predicates[i].evaluate(this.tuple)) {
           return true;
         }
       }
     }
-
     return false;
   }
 

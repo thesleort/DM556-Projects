@@ -102,7 +102,12 @@ The getNext() function is what actually gets the elements. It returns a tuple co
 \lstinputlisting[firstnumber=83,firstline=83,lastline=91,frame=single]{../DM556-project2/relop/Selection.java}
 \vspace{10mm}
 \subsection{Projection.java}
-
+The projection starts by assigning the schema a new schema with the "fields amount of fields". After that it copies all the fields into new schemas using initField(). The last two lines simply assign the parameters to the variables of the class.
+\lstinputlisting[firstnumber=13,firstline=13,lastline=22,frame=single]{../DM556-project2/relop/Projection.java}
+HasNext() is very simple in the Projection. Here it simply returns where there is another tuple available.
+\lstinputlisting[firstnumber=68,firstline=68,lastline=70,frame=single]{../DM556-project2/relop/Projection.java}
+The getNext() function returns the next tuple. However, in contrast to the getNext() from Selection, this getNext() uses the integer fields and also sets the fields of this new tuple before returning it. 
+\lstinputlisting[firstnumber=77,firstline=77,lastline=83,frame=single]{../DM556-project2/relop/Projection.java}
 \subsection{Testing}
 Testing this time around was very successful, assuming it passes in the tests where it returns "failed as expected". It reports that test1, test2 and test3 completed successfully.
 
