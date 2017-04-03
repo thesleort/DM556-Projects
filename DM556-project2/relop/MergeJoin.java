@@ -87,11 +87,12 @@ public class MergeJoin extends Iterator {
 
 	@Override
 	public boolean hasNext() {
-		System.out.println("lcol = "+ lcol);
-		System.out.println("rcol = "+ rcol);
+//		System.out.println("lcol = "+ lcol);
+//		System.out.println("rcol = "+ rcol);
 	while(true) {
 		if (outer == null) {
-			if(left.hasNext()) {
+//            System.out.println("outer = true");
+            if(left.hasNext()) {
 				outer = left.getNext();
 				lcol++;
 			}else{
@@ -105,6 +106,7 @@ public class MergeJoin extends Iterator {
 			rcol++;
 //			System.out.println("joining "+outer.toString()+" with "+ right.toString());
 			this.next = Tuple.join(outer, right.getNext(), schema);
+			if(next.getField())
 			return true;
 			}
 
