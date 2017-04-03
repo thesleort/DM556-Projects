@@ -75,14 +75,14 @@
 \section{Overall Status}
 The group managed to complete the tasks and therefore the project is considered complete.
 \section{Division of Labor}
-The group worked on the project either sitting together at the university or at home remotely working together and spliting tasks when possible. A lot of the time was spent understanding how to implement a solution. Especially Sort and Merge-Join was not very straight forward. The work was very evenly divided - both when writing the code, but also when writing the report.
+The group worked on the project either sitting together at the university or at home remotely working together and splitting tasks when possible. A lot of the time was spent understanding how to implement a solution. Especially Sort and Merge-Join was not very straight forward. The work was very evenly divided - both when writing the code, but also when writing the report.
 \section{Specification}
 The group was tasked with implementing four operators; Selection, Projection, Sort and Merge-Join.
 
 \subsection{Selection}
 Selection is a very basic operation in database management. It uses relational algebra to select the elements. Now the spec for this operator says that every query is combined with a relational \textit{or}. This means that nothing "fancy" has to be done. It should simply select everytime one or more queries return true.
 \subsection{Projection}
-The projection is also one of the more basic operations in database management. A projection extracts the columns from a relation, however, unlike in relational algebra, this operater does not eliminate duplicates.
+The projection is also one of the more basic operations in database management. A projection extracts the columns from a relation, however, unlike in relational algebra, this operator does not eliminate duplicates.
 \subsection{Sort}
 Sort has to be external. External sorting is used in applications where huge amounts of data has to be sorted, thus the data has to sorted in chunks since it cannot all be in main memory. A variant of merge-sort will be used, since it can sort on parts of the data and then combine the sorted parts.
 \subsection{Merge-Join}
@@ -104,12 +104,22 @@ The getNext() function is what actually gets the elements. It returns a tuple co
 \subsection{Projection.java}
 
 \subsection{Testing}
-Testing this time around was very successful, assuming it passes in the tests where it returns "failed as expected". It reports that test1, test2 and test3 completed successfully.
+Testing this time around was very successful. It reports that test1, test2 and test3 completed successfully. \\
+Further more when comparing the expected output with the supplied ExpectedOutput.txt we got the same output except for some initializing  prints and some lines from the explain print statement. \\
 
 \section{Appendix}
-Pickvictim
-\lstinputlisting[firstnumber=37,firstline=37,lastline=46, frame=single]{../dm556-project1/bufmgr/Clock.java}
+Selection.java
+\lstinputlisting[frame=single]{..//DM556-project2/relop/Selection.java}
 
-bufmgr.java
-\lstinputlisting[frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+sort.java
+\lstinputlisting[frame=single]{..//DM556-project2/relop/Sort.java}
+
+MergeJoin.java
+\lstinputlisting[frame=single]{..//DM556-project2/relop/MergeJoin.java}
+
+testing output
+\lstinputlisting[frame=single]{test.output}
+
+
+
 \end{document}
