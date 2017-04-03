@@ -57,7 +57,7 @@ public class Sort extends Iterator implements GlobalConst {
 			  records[pos].insertRecord(hashmap.get(object).data);
 		  }
 		  pos++;
-	  } // PASS 1
+	  }
 
 	  file = sorter(records, bufSize, iter, sortfield)[0];
 	  scan = new FileScan(iter.schema, file);
@@ -77,7 +77,6 @@ public class Sort extends Iterator implements GlobalConst {
 		for (int i = 0; i < heapCount; i++) {
 			scan[i] = new FileScan(iter.schema, records[i]);
 		}
-
 		HeapFile file = new HeapFile(null);
 		Tuple[] tuples = new Tuple[heapCount];
 		int compared = 0;
@@ -107,7 +106,6 @@ public class Sort extends Iterator implements GlobalConst {
 				}
 				current++;
 			}
-
 			file.insertRecord(tuples[smallestPos].data);
 			if (scan[smallestPos].hasNext()) {
 				tuples[smallestPos] = scan[smallestPos].getNext();
@@ -115,7 +113,6 @@ public class Sort extends Iterator implements GlobalConst {
 				tuples[smallestPos].setField(sortfield, Integer.MAX_VALUE);
 				compared++;
 			}
-
 		}
 		records[heapCount - 1] = file;
 		HeapFile[] rest = Arrays.copyOfRange(records, heapCount - 1, records.length);
