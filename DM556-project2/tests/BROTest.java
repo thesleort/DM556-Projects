@@ -191,11 +191,11 @@ public class BROTest extends TestDriver {
 					if(temp.getIntFld(0) >= prev){
 						//its good :)
 						prev = temp.getIntFld(0);
-						System.out.println(temp.getIntFld(0));
+//						System.out.println(temp.getIntFld(0));
 						
 					} else {
 						// its bad :(
-						System.out.println("its bad :(");
+//						System.out.println("its bad :(");
 						passed = false;
 						break;
 					}
@@ -289,13 +289,6 @@ public class BROTest extends TestDriver {
 	      saveCounts(null);
 	      MergeJoin join = new MergeJoin(new FileScan(s_drivers, drivers),
 	          new FileScan(s_rides, rides), 0, 0);
-			Predicate[] preds = new Predicate[] {
-					new Predicate(AttrOperator.GT, AttrType.FIELDNO, 3, AttrType.FLOAT,
-							65F),
-					new Predicate(AttrOperator.LT, AttrType.FIELDNO, 3, AttrType.FLOAT,
-							15F) };
-			SimpleJoin join1 = new SimpleJoin(new FileScan(s_drivers, drivers),
-					new FileScan(s_rides, rides),preds);
 	      join.execute();
 
 	      // destroy temp files before doing final counts
