@@ -76,73 +76,32 @@
 The group managed to complete the tasks and therefore the project is considered complete.
 \section{Division of Labor}
 The group worked on the project either sitting together at the university or at home remotely working together and spliting tasks when possible. A lot of the time was spent understanding how to implement a solution. Especially Sort and Merge-Join was not very straight forward. The work was very evenly divided - both when writing the code, but also when writing the report.
-\subsection{Specification}
+\section{Specification}
 The group was tasked with implementing four operators; Selection, Projection, Sort and Merge-Join.
 
-\subsubsection{Selection}
+\subsection{Selection}
 Selection is a very basic operation in database management. It uses relational algebra to select the elements. Now the spec for this operator says that every query is combined with a relational \textit{or}. This means that nothing "fancy" has to be done. It should simply select everytime one or more queries return true.
-\subsubsection{Projection}
+\subsection{Projection}
 The projection is also one of the more basic operations in database management. A projection extracts the columns from a relation, however, unlike in relational algebra, this operater does not eliminate duplicates.
-\subsubsection{Sort}
+\subsection{Sort}
 Sort has to be external. External sorting is used in applications where huge amounts of data has to be sorted, thus the data has to sorted in chunks since it cannot all be in main memory. A variant of merge-sort will be used, since it can sort on parts of the data and then combine the sorted parts.
-\subsubsection{Join}
-
-
-
-
-
-We were tasked with implementing the following functions for the bufmgr.java\\
-
-freePage, pinPage, unpinPage, flushPage, flushAllPages, getNumBuffers, getNumUnpinned and pick victim. \\
-
-freePage should deallocate a page from disk.\\
-
-Pinpage should pin a page by incrementing the pincnt by 1, or by loading it into the bufferpool if it isnt in the bufferpool already.\\
-
-Unpinpage should unpin a page, flush it to disk if its dirty and reduce the pincount by 1.\\
-
-Flushpage should save a page to disk if dirty.\\
-
-Flushpages should write all pages to disk if they're dirty.\\
-
-getNumBuffers gets the amount of buffers.\\
-
-getNumUnpinned gets the number of unpinned pages.\\
-
-Pickvictim gets the index for the first unpinned page, and returns -1 if all pages in the pool are pinned.
+\subsection{Merge-Join}
+The merge-join assumes that the both inputs are sorted. It then has to merge where possible.
 
 %\subsection{Design}
 %
 %Flushpages was implementing using Flushpage as they're almost %doing the same and this reduces the amount of dubplicate code. 
 
-\subsection{Implementation}
-Freepage First checks if the page is pinned. If its not, it then deallocates the page from disk.
-\lstinputlisting[firstnumber=105,firstline=105,lastline=118,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
+\section{Implementation}
+\subsection{Selection.java}
+Selection starts by assigning local protected variables some values from the parameters. 
+\lstinputlisting[firstnumber=16,firstline=16,lastline=21,frame=single]{../DM556-project2/relop/Selection.java}
+The selection process takes place in the hasNext() function. Here it keeps checking if there are more elements to be selected using the evalulate() function. It returns true if it allows the selection and false if there are no more elements to be selected.
+\lstinputlisting[firstnumber=66,firstline=66,lastline=76,frame=single]{../DM556-project2/relop/Selection.java}
+The getNext() function is what actually gets the elements. It returns a tuple containing the next element. If there are no more elements to be selected, it will throw an exception, telling that there are no more tuples.
+\lstinputlisting[firstnumber=83,firstline=83,lastline=91,frame=single]{../DM556-project2/relop/Selection.java}
 \vspace{10mm}
-pinpage
-\lstinputlisting[firstnumber=137,firstline=137,lastline=137,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
-First we check if the page is already in the bufferpoll if it is we increment the pin counter
-\lstinputlisting[firstnumber=141,firstline=141,lastline=152,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
-If it isnt we pick a victim, and if there isnt any victims we throw an IllegalStateException.
-\lstinputlisting[firstnumber=155,firstline=155,lastline=159,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
-If we have a non pinned frame we write this page to disk if its dirty.
-\lstinputlisting[firstnumber=162,firstline=162,lastline=168,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
-And if it isnt dirty we  copy or read the new page into the bufferpool and update the pagemap.
-\lstinputlisting[firstnumber=170,firstline=170,lastline=186,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
-\vspace{10mm}
-unpinpage
-\lstinputlisting[firstnumber=195,firstline=195,lastline=195,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
-First we check if the page is pinned. if its not we throw an exception.
-\lstinputlisting[firstnumber=199,firstline=199,lastline=202,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
-If its in the buffpool we decrement the pagecounter by 1, and update the pagemap with the new information.
-\lstinputlisting[firstnumber=204,firstline=204,lastline=211,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
-\vspace{10mm}
-flushpage
-\lstinputlisting[firstnumber=220, firstline=220,lastline=220,frame=single]{../dm556-project1/bufmgr/BufMgr.java}
-\vspace{10mm}
-
-Pickvictim is implemented to return the index for the first element with pincnt 0. and if all elements are in use, it returns -1 to indicate this.
-\lstinputlisting[firstnumber=37,firstline=37,lastline=46, frame=single]{../dm556-project1/bufmgr/Clock.java}
+\subsection{Projection.java}
 
 \subsection{Testing}
 Testing this time around was very successful, assuming it passes in the tests where it returns "failed as expected". It reports that test1, test2 and test3 completed successfully.
