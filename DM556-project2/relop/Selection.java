@@ -12,6 +12,7 @@ public class Selection extends Iterator {
   protected Tuple tuple;
   /**
    * Constructs a selection, given the underlying iterator and predicates.
+   *
    */
   public Selection(Iterator iter, Predicate... preds) {
     this.iterator = iter;
@@ -66,6 +67,7 @@ public class Selection extends Iterator {
   public boolean hasNext() {
     while(this.iterator.hasNext()) {
       this.tuple = this.iterator.getNext();
+
       for(int i = 0; i < this.predicates.length; ++i) {
         if(this.predicates[i].evaluate(this.tuple)) {
           return true;

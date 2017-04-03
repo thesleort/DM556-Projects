@@ -29,11 +29,6 @@ public class MergeJoin extends Iterator {
     /**
      * Current tuple from left iterator.
      */
-    protected Tuple tuple;
-
-    /**
-     * Current tuple from left iterator.
-     */
     protected Tuple outer;
 
 
@@ -57,17 +52,14 @@ public class MergeJoin extends Iterator {
     public void explain(int depth) {
 
         indent(depth);
-        System.out.print("Projection : ");
+        System.out.print("Merge join : ");
         for (int i = 0; i < this.schema.names.length - 1; i++) {
             System.out.println("{" + this.schema.names[i] + "}");
         }
         System.out.println("{" + this.schema.names[this.schema.names.length - 1] + "}");
         this.left.explain(depth + 1);
         this.right.explain(depth + 1);
-//
-        // TODO Auto-generated method stub
-//		throw new UnsupportedOperationException("Not implemented");
-    }
+}
 
     @Override
     public void restart() {
@@ -98,9 +90,7 @@ public class MergeJoin extends Iterator {
             if (outer == null) {
                 if (left.hasNext()) {
                     outer = left.getNext();
-                } else {
-                    return false;
-                }
+                } else { return false; }
             }
             while (this.right.hasNext()) {
                 Tuple rightTuple = right.getNext();
@@ -109,8 +99,6 @@ public class MergeJoin extends Iterator {
                     return true;
                 }
             }
-
-
             outer = null;
             right.restart();
         }
@@ -121,7 +109,6 @@ public class MergeJoin extends Iterator {
 
     @Override
     public Tuple getNext() {
-
         // validate the next tuple
         if (next == null) {
             throw new IllegalStateException("no more tuples");

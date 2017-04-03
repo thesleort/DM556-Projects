@@ -106,8 +106,21 @@ The projection starts by assigning the schema a new schema with the "fields amou
 \lstinputlisting[firstnumber=13,firstline=13,lastline=22,frame=single]{../DM556-project2/relop/Projection.java}
 HasNext() is very simple in the Projection. Here it simply returns where there is another tuple available.
 \lstinputlisting[firstnumber=68,firstline=68,lastline=70,frame=single]{../DM556-project2/relop/Projection.java}
-The getNext() function returns the next tuple. However, in contrast to the getNext() from Selection, this getNext() uses the integer fields and also sets the fields of this new tuple before returning it. 
+The getNext() function returns the next tuple. However, in contrast to the getNext() from Selection, this getNext() uses the integer fields and also sets the fields of this new tuple before returning it.
 \lstinputlisting[firstnumber=77,firstline=77,lastline=83,frame=single]{../DM556-project2/relop/Projection.java}
+
+
+\subsection{Sort.java}
+
+\subsection{MergeJoin.java}
+The merge join function first merges the two schemas
+\lstinputlisting[firstnumber=41,firstline=41,lastline=46,frame=single]{../DM556-project2/relop/MergeJoin.java}
+
+The Hasnext function then first selects a left tuple, and compares it to all right tuples, if it two that are comparable it returns true. else it loops over all combinations and returns false if none are found. but also the next element in the array is stored in the next variable\\
+\lstinputlisting[firstnumber=88,firstline=88,lastline=103,frame=single]{../DM556-project2/relop/MergeJoin.java}
+The next variable is then stored in a temp variable, set to null, and returned from the temp variable
+\lstinputlisting[firstnumber=111,firstline=111,lastline=120,frame=single]{../DM556-project2/relop/MergeJoin.java}
+
 \subsection{Testing}
 Testing this time around was very successful. It reports that test1, test2 and test3 completed successfully. \\
 Further more when comparing the expected output with the supplied ExpectedOutput.txt we got the same output except for some initializing  prints and some lines from the explain print statement. \\

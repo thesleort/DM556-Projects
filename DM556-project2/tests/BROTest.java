@@ -214,7 +214,7 @@ public class BROTest extends TestDriver {
 				}
 			
 			} catch (Exception e) {
-				// TODO: handle exception
+
 				e.printStackTrace(System.out);
 				System.out.println("\n FAIL!!!!");
 				return FAIL;
