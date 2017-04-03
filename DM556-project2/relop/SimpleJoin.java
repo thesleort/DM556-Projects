@@ -52,7 +52,7 @@ public class SimpleJoin extends Iterator {
       System.out.println("(cross)");
     }
     left.explain(depth + 1);
-    right.explain(depth + 1);
+      right.explain(depth + 1);
   }
 
   /**
