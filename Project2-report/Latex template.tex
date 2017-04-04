@@ -107,16 +107,16 @@ The projection starts by assigning the schema a new schema with the "fields amou
 HasNext() is very simple in the Projection. Here it simply returns where there is another tuple available.
 \lstinputlisting[firstnumber=68,firstline=68,lastline=70,frame=single]{../DM556-project2/relop/Projection.java}
 The getNext() function returns the next tuple. However, in contrast to the getNext() from Selection, this getNext() uses the integer fields and also sets the fields of this new tuple before returning it.
-\lstinputlisting[firstnumber=77,firstline=77,lastline=68 ,frame=single]{../DM556-project2/relop/Projection.java}
+\lstinputlisting[firstnumber=77,firstline=77,lastline=86 ,frame=single]{../DM556-project2/relop/Projection.java}
 
 
 \subsection{Sort.java}
 For sort we used a filescan, and a heapfile for the sorting. \\
-First the data is loaded into a heapfile. from there they can be sorted using a sorting function.
+First the data is loaded into a heapfile. From there the data can be sorted using a sorting function. In this case the sort function is the built-in function in Java.
 \lstinputlisting[firstnumber=33,firstline=33,lastline=46,frame=single]{../DM556-project2/relop/Sort.java}
 
-this sorter functions sorts the elements recursively, by using the heapfile with records of the tuples.
-\lstinputlisting[firstnumber=66,firstline=66,lastline=119,frame=single]{../DM556-project2/relop/Sort.java}	
+The sorter function sorts the elements recursively, by using the heapfile with records of the tuples.
+\lstinputlisting[firstnumber=65,firstline=65,lastline=122,frame=single]{../DM556-project2/relop/Sort.java}	
 \subsection{MergeJoin.java}
 The merge join function first merges the two schemas
 \lstinputlisting[firstnumber=41,firstline=41,lastline=46,frame=single]{../DM556-project2/relop/MergeJoin.java}
