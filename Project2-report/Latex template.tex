@@ -115,7 +115,7 @@ For sort we used a filescan, and a heapfile for the sorting. \\
 First the data is loaded into a heapfile. from there they can be sorted using a sorting function.
 \lstinputlisting[firstnumber=33,firstline=33,lastline=46,frame=single]{../DM556-project2/relop/Sort.java}
 
-this sorter functions sorts the elements recursively by doing stuff
+this sorter functions sorts the elements recursively, by using the heapfile with records of the tuples.
 \lstinputlisting[firstnumber=66,firstline=66,lastline=119,frame=single]{../DM556-project2/relop/Sort.java}	
 \subsection{MergeJoin.java}
 The merge join function first merges the two schemas
