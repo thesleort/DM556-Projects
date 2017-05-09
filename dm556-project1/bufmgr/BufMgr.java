@@ -254,8 +254,8 @@ public class BufMgr implements GlobalConst {
 	 * Gets the total number of unpinned buffer frames.
 	 */
 	public int getNumUnpinned() {
-	    // Using a loop, this checks the state of each frame. Each time an unpinned frame is found, "j" is incremented.
-        // In the end "j" is returned, as that must be the total amount of unpinned buffer frames.
+	    // Using a loop, this checks the state of each frame. Each time an unpinned frame is found, "explainbool" is incremented.
+        // In the end "explainbool" is returned, as that must be the total amount of unpinned buffer frames.
 	    int j = 0;
         for (int i = 0 ; i < Minibase.BufferManager.frametab.length; i++ ) {
             if (0 == Minibase.BufferManager.frametab[i].pincnt) j++;
