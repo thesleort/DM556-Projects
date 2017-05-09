@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.4.24)  9 MAY 2017 15:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.4.24)  9 MAY 2017 18:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1080,32 +1080,32 @@ Overfull \hbox (2.97632pt too wide) in paragraph at lines 76--77
 ot at 12:00, so we agreed with Yongluan 
  []
 
-LaTeX Font Info:    Try loading font information for T1+cmss on input line 104.
+LaTeX Font Info:    Try loading font information for T1+cmss on input line 101.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmss.fd
 File: t1cmss.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 ) [1]
-LaTeX Font Info:    Try loading font information for U+msa on input line 132.
+LaTeX Font Info:    Try loading font information for U+msa on input line 135.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 132.
+LaTeX Font Info:    Try loading font information for U+msb on input line 135.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Overfull \hbox (146.8902pt too wide) in paragraph at lines 135--136
+Overfull \hbox (146.8902pt too wide) in paragraph at lines 138--139
 [][][] 
  []
 
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 156.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 159.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 156.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 159.
  [2]
 (..//DM532-project3/query/Select.java
 LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10> not available
@@ -1118,7 +1118,7 @@ AED: lastpage setting LastPage
 Here is how much of TeX's memory you used:
  17244 strings out of 494333
  307290 string characters out of 6163939
- 575052 words of memory out of 5000000
+ 574052 words of memory out of 5000000
  20189 multiletter control sequences out of 15000+600000
  12958 words of font info for 32 fonts, out of 8000000 for 9000
  372 hyphenation exceptions out of 8191
@@ -1133,9 +1133,9 @@ pk/ljfour/jknappen/ec/ecrm2074.600pk> </home/troels/.texmf-var/fonts/pk/ljfour/
 jknappen/ec/ecbx2074.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/am
 sfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmsy10.pfb>
-Output written on "Latex template.pdf" (8 pages, 187814 bytes).
+Output written on "Latex template.pdf" (8 pages, 189444 bytes).
 PDF statistics:
- 366 PDF objects out of 1000 (max. 8388607)
+ 371 PDF objects out of 1000 (max. 8388607)
  62 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  18 words of extra memory for PDF output out of 10000 (max. 10000000)
