@@ -23,12 +23,12 @@ class Select implements Plan {
   public Select(AST_Select tree) throws QueryException {
 
     this.isExplain = tree.isExplain;
-    this.Selecter(tree);
-    this.selectjoin();
+    this.parser(tree);
+    this.optimizer();
 
   } // public Select(AST_Select tree) throws QueryException
 
-  protected void Selecter(AST_Select tree) throws QueryException {
+  protected void parser(AST_Select tree) throws QueryException {
     this.schema = new Schema(0);
     this.preads = tree.getPredicates();
     this.tables = tree.getTables();
@@ -53,7 +53,7 @@ class Select implements Plan {
     QueryCheck.predicates(this.schema, this.preads);
   }
 
-  protected void selectjoin() {
+  protected void optimizer() {
     this.interator = new FileScan(this.newschema[0], new HeapFile(this.tables[0]));
 
     int i;
