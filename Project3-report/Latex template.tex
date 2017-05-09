@@ -98,65 +98,100 @@ implement the two query types delete and update.
 %Flushpages was implementing using Flushpage as they're almost %doing the same and this reduces the amount of dubplicate code. 
 
 \section{Implementation}
+TODO
 
 \subsection{Select}
 
-
+TODO
 \subsection{delete}
-
+The first thing that happens when the delete 
 
 \subsection{update}
 
-\subsection{Selection.java}
-Selection starts by assigning local protected variables some values from the parameters. 
-\lstinputlisting[firstnumber=16,firstline=16,lastline=21,frame=single]{../DM556-project2/relop/Selection.java}
-The selection process takes place in the hasNext() function. Here it keeps checking if there are more elements to be selected using the evalulate() function. It returns true if it allows the selection and false if there are no more elements to be selected.
-\lstinputlisting[firstnumber=66,firstline=66,lastline=76,frame=single]{../DM556-project2/relop/Selection.java}
-The getNext() function is what actually gets the elements. It returns a tuple containing the next element. If there are no more elements to be selected, it will throw an exception, telling that there are no more tuples.
-\lstinputlisting[firstnumber=83,firstline=83,lastline=91,frame=single]{../DM556-project2/relop/Selection.java}
-\vspace{10mm}
-\subsection{Projection.java}
-The projection starts by assigning the schema a new schema with the "fields amount of fields". After that it copies all the fields into new schemas using initField(). The last two lines simply assign the parameters to the variables of the class.
-\lstinputlisting[firstnumber=13,firstline=13,lastline=22,frame=single]{../DM556-project2/relop/Projection.java}
-HasNext() is very simple in the Projection. Here it simply returns where there is another tuple available.
-\lstinputlisting[firstnumber=68,firstline=68,lastline=70,frame=single]{../DM556-project2/relop/Projection.java}
-The getNext() function returns the next tuple. However, in contrast to the getNext() from Selection, this getNext() uses the integer fields and also sets the fields of this new tuple before returning it.
-\lstinputlisting[firstnumber=77,firstline=77,lastline=86 ,frame=single]{../DM556-project2/relop/Projection.java}
+\subsection{Select.java}
 
+TODO
 
-\subsection{Sort.java}
-For sort we used a filescan, and a heapfile for the sorting. \\
-First the data is loaded into a heapfile. From there the data can be sorted using a sorting function. In this case the sort function is the built-in function in Java.
-\lstinputlisting[firstnumber=33,firstline=33,lastline=46,frame=single]{../DM556-project2/relop/Sort.java}
+\subsection{Update.java}
 
-The sorter function sorts the elements recursively, by using the heapfile with records of the tuples.
-\lstinputlisting[firstnumber=65,firstline=65,lastline=122,frame=single]{../DM556-project2/relop/Sort.java}	
-\subsection{MergeJoin.java}
-The merge join function first merges the two schemas
-\lstinputlisting[firstnumber=41,firstline=41,lastline=46,frame=single]{../DM556-project2/relop/MergeJoin.java}
+TODO
+\subsection{Delete.java}
 
-The Hasnext function then first selects a left tuple, and compares it to all right tuples, if it two that are comparable it returns true. else it loops over all combinations and returns false if none are found. but also the next element in the array is stored in the next variable\\
-\lstinputlisting[firstnumber=88,firstline=88,lastline=103,frame=single]{../DM556-project2/relop/MergeJoin.java}
-The next variable is then stored in a temp variable, set to null, and returned from the temp variable
-\lstinputlisting[firstnumber=111,firstline=111,lastline=120,frame=single]{../DM556-project2/relop/MergeJoin.java}
+TODO
+
+%lstinputlisting[firstnumber=111,firstline=111,lastline=120,frame=single]{../DM556-project2/relop/MergeJoin.java}
 
 \subsection{Testing}
-Testing this time around was very successful. It reports that test1, test2 and test3 completed successfully. \\
-Further more when comparing the expected output with the supplied ExpectedOutput.txt we got the same output except for some initializing  prints and some lines from the explain print statement. \\
+
+\subsection{Select}
+\begin{lstlisting}
+MSQL> SELECT name,depname FROM Emp, Works,Dept WHERE id = eid AND depid = did;
+
+name                                              depname                                           
+----------------------------------------------------------------------------------------------------
+Yongluan                                          IMADA                                             
+Yongluan                                          ADMINISTRATION                                    
+Jacob                                             IMADA                                             
+Claus                                             ADMINISTRATION                                    
+4 rows affected.
+\end{lstlisting}
+
+\subsection{Update}
+\subsubsection{Starting point}
+\begin{lstlisting}
+name                                              id        age       
+----------------------------------------------------------------------
+Yongluan                                          1         28        
+Jacob                                             2         32        
+Claus                                             3         42       
+\end{lstlisting}
+\subsubsection{After update}
+\begin{lstlisting}
+MSQL> update emp set age = 42 where id = 2;
+1 rows affected.
+MSQL> select * from emp;
+
+name                                              id        age       
+----------------------------------------------------------------------
+Yongluan                                          1         28        
+Jacob                                             2         42        
+Claus                                             3         42        
+3 rows affected.
+\end{lstlisting}
+
+\subsection{Delete}
+\subsubsection{Starting point}
+\begin{lstlisting}
+MSQL> select * from emp;
+name                                              id        age       
+----------------------------------------------------------------------
+Yongluan                                          1         28        
+Jacob                                             2         42        
+Claus                                             3         42        
+3 rows affected.
+\end{lstlisting}
+\subsubsection{After update}
+
+\begin{lstlisting}
+MSQL> delete from Emp where id = 3;
+1 rows affected.
+MSQL> select * from emp;
+name                                              id        age       
+----------------------------------------------------------------------
+Yongluan                                          1         28        
+Jacob                                             2         42     
+2 rows affected.  
+\end{lstlisting}
 
 \section{Appendix}
-Selection.java
-\lstinputlisting[frame=single]{..//DM556-project2/relop/Selection.java}
+Select.java
+\lstinputlisting[frame=single]{..//DM532-project3/query/Select.java}
 
-sort.java
-\lstinputlisting[frame=single]{..//DM556-project2/relop/Sort.java}
+Delete.java
+\lstinputlisting[frame=single]{..//DM532-project3/query/Delete.java}
 
-MergeJoin.java
-\lstinputlisting[frame=single]{..//DM556-project2/relop/MergeJoin.java}
-
-testing output
-\lstinputlisting[frame=single]{test.output}
-
+Update.java
+\lstinputlisting[frame=single]{..//DM532-project3/query/Update.java}
 
 
 \end{document}
