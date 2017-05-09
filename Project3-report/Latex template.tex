@@ -101,8 +101,12 @@ implement the two query types delete and update.
 TODO
 
 \subsection{Select}
-
-TODO
+Select has implemented four functions, one of which is the executer \textsf{execute()} and the constructor \textsf{Select(AST\_Select)} that takes the AST\_Select-object as input. First it is checked whether or not the current tree is an EXPLAIN statement. Then it starts running \textsf{parser(AST\_Select)}.
+\\
+\textsf{parser(AST\_Select)} rationalizes the statement, so it makes sense for a computer. It does so, by saving the predicates, tables and columns separately. It then combines(joins) all the tables into one large schema. Afterwards it is checked whether the all the coloumns are present in the new schema. If they are not, the \textsf{QueryCheck.columnExists(...)} will throw an exception.\\
+Very similar is the last part of the function, where \textsf{QueryCheck.predicates} will also throw an exception, if the predicate is illegal and doesn't fit with the tables and columns.
+\\
+The \textsf{optimizer()} function 
 \subsection{delete}
 The first thing that happens when the delete 
 

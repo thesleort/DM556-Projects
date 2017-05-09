@@ -9,11 +9,11 @@ import relop.*;
  */
 class Select implements Plan {
   protected String[] tables;
-  protected Schema[] newschema;
+  protected Schema[] newSchema;
   protected String[] columns;
-  protected Predicate[][] preads;
+  protected Predicate[][] preds;
   public boolean isExplain;
-  protected Iterator interator;
+  protected Iterator iterator;
   protected Schema schema;
   /**
    * Optimizes the plan, given the parsed query.
@@ -30,17 +30,17 @@ class Select implements Plan {
 
   protected void parser(AST_Select tree) throws QueryException {
     this.schema = new Schema(0);
-    this.preads = tree.getPredicates();
+    this.preds = tree.getPredicates();
     this.tables = tree.getTables();
     this.columns = tree.getColumns();
 
 
     String[] columns = this.columns;
-    this.newschema = new Schema[this.tables.length];
+    this.newSchema = new Schema[this.tables.length];
 
     for(int i = 0; i < this.tables.length; ++i) {
-      this.newschema[i] = QueryCheck.tableExists(this.tables[i]);
-      this.schema = Schema.join(this.schema, this.newschema[i]);
+      this.newSchema[i] = QueryCheck.tableExists(this.tables[i]);
+      this.schema = Schema.join(this.schema, this.newSchema[i]);
     }
 
 
@@ -50,19 +50,19 @@ class Select implements Plan {
     }
 
 
-    QueryCheck.predicates(this.schema, this.preads);
+    QueryCheck.predicates(this.schema, this.preds);
   }
 
   protected void optimizer() {
-    this.interator = new FileScan(this.newschema[0], new HeapFile(this.tables[0]));
+    this.iterator = new FileScan(this.newSchema[0], new HeapFile(this.tables[0]));
 
     int i;
     for(i = 1; i < this.tables.length; ++i) {
-      this.interator = new SimpleJoin(this.interator, new FileScan(this.newschema[i], new HeapFile(this.tables[i])), new Predicate[0]);
+      this.iterator = new SimpleJoin(this.iterator, new FileScan(this.newSchema[i], new HeapFile(this.tables[i])), new Predicate[0]);
     }
 
-    for(i = 0; i < this.preads.length; ++i) {
-      this.interator = new Selection(this.interator, this.preads[i]);
+    for(i = 0; i < this.preds.length; ++i) {
+      this.iterator = new Selection(this.iterator, this.preds[i]);
     }
 
     if(this.columns.length > 0) {
@@ -72,7 +72,7 @@ class Select implements Plan {
         intlist[j] = Integer.valueOf(this.schema.fieldNumber(this.columns[j]));
       }
 
-      this.interator = new Projection(this.interator, intlist);
+      this.iterator = new Projection(this.iterator, intlist);
     }
 
   }
@@ -82,9 +82,9 @@ class Select implements Plan {
    */
   public void execute() {
     if(isExplain) {
-      this.interator.explain(0);
+      this.iterator.explain(0);
     } else {
-      int i = this.interator.execute();
+      int i = this.iterator.execute();
       System.out.println("\n" + i + " rows affected.");
     }
   } // public void execute()
