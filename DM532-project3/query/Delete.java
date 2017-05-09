@@ -43,30 +43,28 @@ class Delete implements Plan {
       selection = new Selection((Iterator)selection, this.preds[i]);
     }
 
-    ArrayList var13 = new ArrayList();
+    ArrayList deletelist = new ArrayList();
     IndexDesc[] indexes = Minibase.SystemCatalog.getIndexes(this.filename);
 
     while(((Iterator)selection).hasNext()) {
       Tuple next = ((Iterator)selection).getNext();
-      RID lastRID = fileScan.getLastRID();
-      var13.add(lastRID);
+      deletelist.add(fileScan.getLastRID());
 
       for(int j = 0; j < indexes.length; ++j) {
         IndexDesc index = indexes[j];
         SearchKey searchKey = new SearchKey(next.getField(index.indexName));
-        (new HashIndex(index.indexName)).deleteEntry(searchKey, lastRID);
+        (new HashIndex(index.indexName)).deleteEntry(searchKey, fileScan.getLastRID());
       }
     }
 
     ((Iterator)selection).close();
-    java.util.Iterator deleteIterator = var13.iterator();
+    java.util.Iterator deleteIterator = deletelist.iterator();
 
     while(deleteIterator.hasNext()) {
-      RID var14 = (RID)deleteIterator.next();
-      file.deleteRecord(var14);
+      file.deleteRecord((RID)deleteIterator.next());
     }
 
-    System.out.println(var13.size() + " rows affected.");
+    System.out.println(deletelist.size() + " rows affected.");
 
     // print the output message
 
