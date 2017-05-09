@@ -12,11 +12,11 @@ import relop.*;
  * Execution plan for updating tuples.
  */
 class Update implements Plan {
-  protected String filename; //else
-  protected Schema schema; //case
-  protected int[] fldnos;    //byte
-  protected Object[] values;  //try
-  protected Predicate[][] preds; //char
+  protected String filename;
+  protected Schema schema;
+  protected int[] fldnos;
+  protected Object[] values;
+  protected Predicate[][] preds;
 
   /**
    * Optimizes the plan, given the parsed query.

@@ -79,7 +79,7 @@ The group worked on the project either sitting together at the university or at 
 \section{Specification}
 In the third assignment of the course we are tasked with implementing a basic query optimizer for select and 2 other elective assignments.\\
 
-For the elective assignment i choose to implement update and delete and \textbf{WREWRWERWERW Write something here}
+For the elective assignment i choose to implement update and delete and \textbf{Write something here}
 
 
 \subsection{Select}
@@ -89,7 +89,8 @@ Implement the basic query optimizer for the select class, you most call the Quer
 
 implement the two query types delete and update.
 
-\subsection{SomethingWEFDSAF}
+\subsection{Pushing down predicates}
+If possible the selection should push down predicates in the tree if possible.
 
 
 
@@ -106,7 +107,7 @@ Select has implemented four functions, one of which is the executer \textsf{exec
 \textsf{parser(AST\_Select)} rationalizes the statement, so it makes sense for a computer. It does so, by saving the predicates, tables and columns separately. It then combines(joins) all the tables into one large schema. Afterwards it is checked whether the all the coloumns are present in the new schema. If they are not, the \textsf{QueryCheck.columnExists(...)} will throw an exception.\\
 Very similar is the last part of the function, where \textsf{QueryCheck.predicates} will also throw an exception, if the predicate is illegal and doesn't fit with the tables and columns.
 \\
-The \textsf{optimizer()} TODO
+The \textsf{optimizer()} What happens in the optimizer is that the Tree is optimized so that it performs as few operations as possible
 \\
 \textsf{execute()} simply executes based on the \textsf{isExplain} boolean. If \textsf{isExplain} is false, it tells how many rows were affected.
 
@@ -115,13 +116,11 @@ The \textsf{Delete()} function deletes records based on the \textsf{AST\_Delete}
 \\
 \textsf{execute()} is where the actual deletion takes place. Here it gets the tables and starts deleting records based on the predicates. It finds the records using keys corresponding to each record, for use in the hashbased database. In the end it reports the amount of records that were affected (deleted).
 
-TODO
+\subsection{Update.java}
+The update Function updates records where a condition is met. what happens in the Update function call is that all the fields, values and predicates are checked for validity.
 
-\subsection{update}
-TODO
-\subsection{Delete.java}
+The update itself happends in the \textsf{execute()}  Here it gets the tables and starts updating records based on the predicates. It finds the records using keys corresponding to each record, for use in the hashbased database. In the end it reports the amount of records that were affected.
 
-TODO
 
 %lstinputlisting[firstnumber=111,firstline=111,lastline=120,frame=single]{../DM556-project2/relop/MergeJoin.java}
 
