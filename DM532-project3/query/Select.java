@@ -56,13 +56,13 @@ class Select implements Plan {
   protected void selectjoin() {
     this.interator = new FileScan(this.newschema[0], new HeapFile(this.tables[0]));
 
-    int var1;
-    for(var1 = 1; var1 < this.tables.length; ++var1) {
-      this.interator = new SimpleJoin(this.interator, new FileScan(this.newschema[var1], new HeapFile(this.tables[var1])), new Predicate[0]);
+    int i;
+    for(i = 1; i < this.tables.length; ++i) {
+      this.interator = new SimpleJoin(this.interator, new FileScan(this.newschema[i], new HeapFile(this.tables[i])), new Predicate[0]);
     }
 
-    for(var1 = 0; var1 < this.preads.length; ++var1) {
-      this.interator = new Selection(this.interator, this.preads[var1]);
+    for(i = 0; i < this.preads.length; ++i) {
+      this.interator = new Selection(this.interator, this.preads[i]);
     }
 
     if(this.columns.length > 0) {
@@ -84,8 +84,8 @@ class Select implements Plan {
     if(isExplain) {
       this.interator.explain(0);
     } else {
-      int var1 = this.interator.execute();
-      System.out.println("\n" + var1 + " rows affected.");
+      int i = this.interator.execute();
+      System.out.println("\n" + i + " rows affected.");
     }
   } // public void execute()
 

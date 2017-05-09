@@ -83,7 +83,8 @@ class Update implements Plan {
     ((Iterator)obj).close();
     System.out.println(i + " rows affected.");
     // print the output message
-    System.out.println("0 rows affected. (Not implemented)");
+    System.out.println(var5 + " rows affected.");
+
 
   } // public void execute()
 

@@ -1,0 +1,162 @@
+	%Template by Mark Jervelund - D1 - 2015 - mjerv15@student.sdu.dk
+
+\documentclass[a4paper,10pt,titlepage]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage[document]{ragged2e}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{datenumber}
+\usepackage{venndiagram}
+\usepackage{chngcntr}
+\setdatetoday
+\addtocounter{datenumber}{0} %date for dilierry standard is today
+\setdatebynumber{\thedatenumber}
+\date{}
+\setcounter{secnumdepth}{0}
+\pagestyle{fancy}
+\fancyhf{}
+
+\newcommand{\Z}{\mathbb{Z}}
+\lhead{Database Management Systems (DM556))}
+\rhead{Mark Jervelund (Mjerv15) Troels B. Petersen (trpet15)}
+\rfoot{Page  \thepage \, of \pageref{LastPage}}
+\counterwithin*{equation}{section}
+
+\lstset{
+  numbers=left,
+  stepnumber=5,    
+  firstnumber=1,
+  numberfirstline=true
+  frame=single,
+  breaklines=true,
+  postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}
+}
+
+\begin{document}
+\begin{titlepage}
+\centering
+    \vspace*{9\baselineskip}
+    \huge
+    \bfseries
+    Project 3\\
+    
+    \normalfont 
+	\huge    
+    Database Management Systems (DM556)  \\[4\baselineskip]
+    \normalfont
+	\includegraphics[scale=1.5]{SDU_Logo}
+    \vfill\
+    Group 2\\
+    Mark Jervelund (Mjerv15)    Troels B. Petersen (trpet15)
+    \vspace{5mm}
+    IMADA \\
+    \textbf{\datedate} \\[2\baselineskip]
+\end{titlepage}
+%\renewcommand{\thepage}{\roman{page}}% Roman numerals for page counter
+%\tableofcontents
+
+%\newpage
+\setcounter{page}{1}
+\renewcommand{\thepage}{\arabic{page}}
+
+\lstset{language=Java}          % Set your language (you can change the language for each code-block optionally)
+\section{Overall Status}
+The group managed to complete the tasks and therefore the project is considered complete, however, due to human error we thought the deadline was at 23:30 and not at 12:00, so we agreed with Yongluan ZHOU to upload what we had at 12 and email the rest within the day.
+\section{Division of Labor}
+The group worked on the project either sitting together at the university or at home remotely working together and splitting tasks when possible. A lot of the time was spent understanding how to implement a solution. Especially Sort and Merge-Join was not very straight forward. The work was very evenly divided - both when writing the code, but also when writing the report.
+\section{Specification}
+In the third assignment of the course we are tasked with implementing a basic query optimizer for select and 2 other elective assignments.\\
+
+For the elective assignment i choose to implement update and delete and \textbf{WREWRWERWERW Write something here}
+
+
+\subsection{Select}
+Implement the basic query optimizer for the select class, you most call the Query check class to validate input. the default plan is to use file scans and simple joins for all tables, and a selection for each conjunct, and have one projection at the root of the tree.
+
+\subsection{delete \& update }
+
+implement the two query types delete and update.
+
+\subsection{SomethingWEFDSAF}
+
+
+
+%\subsection{Design}
+%
+%Flushpages was implementing using Flushpage as they're almost %doing the same and this reduces the amount of dubplicate code. 
+
+\section{Implementation}
+
+\subsection{Select}
+
+
+\subsection{delete}
+
+
+\subsection{update}
+
+\subsection{Selection.java}
+Selection starts by assigning local protected variables some values from the parameters. 
+\lstinputlisting[firstnumber=16,firstline=16,lastline=21,frame=single]{../DM556-project2/relop/Selection.java}
+The selection process takes place in the hasNext() function. Here it keeps checking if there are more elements to be selected using the evalulate() function. It returns true if it allows the selection and false if there are no more elements to be selected.
+\lstinputlisting[firstnumber=66,firstline=66,lastline=76,frame=single]{../DM556-project2/relop/Selection.java}
+The getNext() function is what actually gets the elements. It returns a tuple containing the next element. If there are no more elements to be selected, it will throw an exception, telling that there are no more tuples.
+\lstinputlisting[firstnumber=83,firstline=83,lastline=91,frame=single]{../DM556-project2/relop/Selection.java}
+\vspace{10mm}
+\subsection{Projection.java}
+The projection starts by assigning the schema a new schema with the "fields amount of fields". After that it copies all the fields into new schemas using initField(). The last two lines simply assign the parameters to the variables of the class.
+\lstinputlisting[firstnumber=13,firstline=13,lastline=22,frame=single]{../DM556-project2/relop/Projection.java}
+HasNext() is very simple in the Projection. Here it simply returns where there is another tuple available.
+\lstinputlisting[firstnumber=68,firstline=68,lastline=70,frame=single]{../DM556-project2/relop/Projection.java}
+The getNext() function returns the next tuple. However, in contrast to the getNext() from Selection, this getNext() uses the integer fields and also sets the fields of this new tuple before returning it.
+\lstinputlisting[firstnumber=77,firstline=77,lastline=86 ,frame=single]{../DM556-project2/relop/Projection.java}
+
+
+\subsection{Sort.java}
+For sort we used a filescan, and a heapfile for the sorting. \\
+First the data is loaded into a heapfile. From there the data can be sorted using a sorting function. In this case the sort function is the built-in function in Java.
+\lstinputlisting[firstnumber=33,firstline=33,lastline=46,frame=single]{../DM556-project2/relop/Sort.java}
+
+The sorter function sorts the elements recursively, by using the heapfile with records of the tuples.
+\lstinputlisting[firstnumber=65,firstline=65,lastline=122,frame=single]{../DM556-project2/relop/Sort.java}	
+\subsection{MergeJoin.java}
+The merge join function first merges the two schemas
+\lstinputlisting[firstnumber=41,firstline=41,lastline=46,frame=single]{../DM556-project2/relop/MergeJoin.java}
+
+The Hasnext function then first selects a left tuple, and compares it to all right tuples, if it two that are comparable it returns true. else it loops over all combinations and returns false if none are found. but also the next element in the array is stored in the next variable\\
+\lstinputlisting[firstnumber=88,firstline=88,lastline=103,frame=single]{../DM556-project2/relop/MergeJoin.java}
+The next variable is then stored in a temp variable, set to null, and returned from the temp variable
+\lstinputlisting[firstnumber=111,firstline=111,lastline=120,frame=single]{../DM556-project2/relop/MergeJoin.java}
+
+\subsection{Testing}
+Testing this time around was very successful. It reports that test1, test2 and test3 completed successfully. \\
+Further more when comparing the expected output with the supplied ExpectedOutput.txt we got the same output except for some initializing  prints and some lines from the explain print statement. \\
+
+\section{Appendix}
+Selection.java
+\lstinputlisting[frame=single]{..//DM556-project2/relop/Selection.java}
+
+sort.java
+\lstinputlisting[frame=single]{..//DM556-project2/relop/Sort.java}
+
+MergeJoin.java
+\lstinputlisting[frame=single]{..//DM556-project2/relop/MergeJoin.java}
+
+testing output
+\lstinputlisting[frame=single]{test.output}
+
+
+
+\end{document}
