@@ -28,7 +28,7 @@ class Delete implements Plan {
     this.schema = QueryCheck.tableExists(this.filename);
     this.preds = tree.getPredicates();
     QueryCheck.predicates(this.schema, this.preds);
-//    f.a(this.schema, this.preds);
+
   } // public Delete(AST_Delete tree) throws QueryException
 
   /**

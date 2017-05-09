@@ -50,7 +50,7 @@ class Select implements Plan {
     }
 
 
-    f.a(this.schema, this.preads);
+    QueryCheck.predicates(this.schema, this.preads);
   }
 
   protected void selectjoin() {
