@@ -87,19 +87,31 @@ class Select implements Plan {
 
         //TODO make list of interators.
         this.iteratorlist = new ArrayList<Iterator>();
+        this.iterator = new FileScan(this.newSchema[0], new HeapFile(this.tables[0]));
+
         for (int j = 0; j < this.preds.length; ++j) {
-            this.iteratorlist.add(new Selection(new FileScan(this.newSchema[0], new HeapFile(this.tables[0])), this.preds[j]));
+            this.iterator = new Selection(this.iterator, this.preds[j]);
         }
-        int i;
-        for (i = 1; i < this.tables.length; ++i) {
+        this.iteratorlist.add(this.iterator);
+
+        Iterator tempiterator;
+        for (int i = 1; i < this.tables.length; ++i) {
+            tempiterator = new FileScan(this.newSchema[i], new HeapFile(this.tables[i]));
             for (int j = 0; j < this.preds.length; ++j) {
-                System.out.println("j is " + j + " i is " + i);
-                this.iteratorlist.add(new Selection(new FileScan(this.newSchema[i], new HeapFile(this.tables[i])), this.preds[j]));
+                tempiterator = new Selection(tempiterator, this.preds[j]);
             }
+            this.iteratorlist.add(tempiterator);
         }
-        this.iterator = this.iteratorlist.get(0);
+
+
+
         //TODO Join lists of interators.
-        for (i = 1; i < this.tables.length; ++i) {
+        if(this.preds.length != 0){
+            System.out.println("getting first arg");
+            this.iterator = this.iteratorlist.get(0);
+        }
+        for (int i = 1; i < this.tables.length; ++i) {
+            System.out.println("joining the two");
             this.iterator = new SimpleJoin(this.iterator, this.iteratorlist.get(i), new Predicate[0]);
 
         }
