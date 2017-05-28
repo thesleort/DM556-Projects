@@ -28,7 +28,7 @@ class Select implements Plan {
 
         this.isExplain = tree.isExplain;
         this.parser(tree);
-        this.optimizer();
+        this.optimizer2();
 
     } // public Select(AST_Select tree) throws QueryException
 
@@ -57,6 +57,8 @@ class Select implements Plan {
         QueryCheck.predicates(this.schema, this.preds);
     }
 
+
+    //doesn't push down, (naive)
     protected void optimizer1() {
         this.iterator = new FileScan(this.newSchema[0], new HeapFile(this.tables[0]));
 
@@ -83,7 +85,58 @@ class Select implements Plan {
 
     }
 
-    protected void optimizer() {
+
+    //pushes down if possible.
+    protected void optimizer2() {
+        this.iterator = new FileScan(this.newSchema[0], new HeapFile(this.tables[0]));
+        for (int i = 1; i < this.tables.length; i++) {
+            this.iterator = new SimpleJoin(this.iterator, new FileScan(this.newSchema[i], new HeapFile(this.tables[i])), new Predicate[0]);
+            ArrayList<Predicate[]> PredicatesToBeRemoved = new ArrayList<>();
+            for (Predicate[] pred : this.preds) {
+                Predicate[][] Checkingpred = new Predicate[1][pred.length];
+                Checkingpred[0] = pred;
+                for (int j = 0; j < Checkingpred[0].length - 1; j++) {
+
+                    if (Checkingpred[0][j].validate(this.iterator.getSchema())) {
+                        try {
+                            QueryCheck.predicates(this.iterator.getSchema(), Checkingpred);
+                            this.iterator = new Selection(this.iterator, pred);
+
+                            PredicatesToBeRemoved.add(Checkingpred[0]);
+                        } catch (QueryException e) {}
+                    }
+                }
+            }
+            Predicate[][] newPredicates = new Predicate[this.preds.length - PredicatesToBeRemoved.size()][this.preds[0].length];
+
+            for (int j = 0; j < this.preds.length; j++) {
+
+                if (!PredicatesToBeRemoved.contains(this.preds[j])) {
+
+                    if (j < newPredicates.length) {
+                        newPredicates[j] = this.preds[j];
+                    }
+                }
+            }
+            this.preds = newPredicates;
+        }
+        for (int i = 0; i < this.preds.length; ++i) {
+            System.out.println("i is " + i);
+            this.iterator = new Selection(this.iterator, this.preds[i]);
+        }
+        if (this.columns.length > 0) {
+            Integer[] intlist = new Integer[this.columns.length];
+            for (int j = 0; j < this.columns.length; ++j) {
+                intlist[j] = Integer.valueOf(this.schema.fieldNumber(this.columns[j]));
+            }
+            this.iterator = new Projection(this.iterator, intlist);
+        }
+
+    }
+
+
+    //forces select to be pushed down, and therefor crashes.
+    protected void optimizer3() {
 
         //TODO make list of interators.
         this.iteratorlist = new ArrayList<Iterator>();
@@ -102,11 +155,8 @@ class Select implements Plan {
             }
             this.iteratorlist.add(tempiterator);
         }
-
-
-
         //TODO Join lists of interators.
-        if(this.preds.length != 0){
+        if (this.tables.length != 0) {
             System.out.println("getting first arg");
             this.iterator = this.iteratorlist.get(0);
         }
