@@ -118,16 +118,61 @@ pickvictim \\
 Gets the first page in the frametab with pincount 0. \\
 This means that we remove the first page in the buffer that no one else is using, if there are no free pages then we return -1 and signalling the parent function that there is no free pages in the buffer pool at the moment.
 
-
+\newpage
 \section{Project 2}
 
 \subsection{projection.java} 
+\subsubsection{ public Projection(Iterator iter, Integer... fields) }
+Makes a new table where the columns we want to select. \\
+	GetNext gets the next via the iterator and only selects the fields in tuple.
 
-\subsection{selection.java} 
+\subsection{selection.java}
 
-\subsection{mergejoin.java} 
+The selection works mostly the same way as out projection. the main difference is that when we check for HasNext we compare with the predicate, if there is a valid tuple, we store this in a variable until get next is called.
+\\
+our getNext then returns the tuple stored by hasnext and sets the variable its stored in to null.
 
 
-\section{OProject 3}
+\subsection{Sort.java}
+
+ 
+\subsection{Mergejoin.java}
+ 
+Merge join assumes that both inputs are sorted.
+It works by using hasNext. It iterates though the "left" input and compares it with the right input. Every time the left input matches the right input, it joins these two.
+
+\newpage
+\section{Project 3}
+\subsection{select.java}
+\subsubsection{Parser}
+checks if the query is valid, this is done by using the QueryCheck function built into the miniDBMS system.
+\subsubsection{Optimizer1}
+naive\\
+Cross joins all tables first \\ then selects all valid tuples, and lastly we project the selected columns from the resulting table.
+
+\subsubsection{Optimizer2}
+
+we build the tree dept first, by looping over the tables to load, and at the same time we check if any of the predicates are valid on any of the individual tables.
+This is done by using the Querycheck function to check if the matching predicates and tables are valid, if they are it's added to the iterator, and the predicate is removed from the predicate list. after this is done for all joins.
+ZZ
+We apply the remaining selections to the top of the tree, and then perform the projection.
+
+
+\subsection{delete.java}
+
+Delete selects all the records to be deleted based on the predicate. 
+
+It does so by iterating through the selection and adding the selected records to the delete list. We add the record-ID to the delete list. This is so that we can remove the entry from the hashIndex.
+
+However, it has not been removed from the database yet. This is done later, where we use the deleteIterator, that is based on the deletelist.
+
+\subsection{update.java}
+
+Very similar to delete, however update inserts a new entry in the hashindex after removing, then updating the information in the heapfile using the update record method in the heapfile data structure, after this is done the key is inserted back into the hashindex. 
+
+
+
+
+
 
 \end{document}
