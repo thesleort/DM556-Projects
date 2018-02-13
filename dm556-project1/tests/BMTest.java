@@ -51,7 +51,7 @@ class  BMTest extends TestDriver {
     System.out.print("manager operations:\n");
 
     // we choose this number to ensure that at least one page
-    // will have to be written during this test
+    // will have to be written during this test.
     boolean status = PASS;
     int numPages = Minibase.BufferManager.getNumUnpinned() +1;
     Page pg = new Page();
