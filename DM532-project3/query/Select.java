@@ -58,7 +58,7 @@ class Select implements Plan {
     }
 
 
-    //doesn't push down, (naive)
+    //doesn't push down, (naive).
     protected void optimizer1() {
         this.iterator = new FileScan(this.newSchema[0], new HeapFile(this.tables[0]));
 
